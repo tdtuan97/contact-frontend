@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "paths": {
+            "@src/*": ["./*"],
+            "@common/*": ["common/*"],
+            "@features/*": ["features/*"],
+            "@images/*": ["images/*"],
+            "@layouts": ["layouts"],
+            "@routes/*": ["routes/*"],
+            "@styles/*": ["styles/*"],
+            "@ultis/*": ["ultis/*"]
+        }
+    }
+}

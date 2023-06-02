@@ -1,0 +1,14 @@
+.form-product {
+    .form-product-inline {
+        display: inline-block;
+        width: calc(50% - 6px);
+
+        .form-product-child {
+            width: 100%;
+        }
+    }
+
+    .form-product-unit{
+        float: right;
+    }
+}

@@ -1,0 +1,11 @@
+export const EVENT_FETCH                  = 'EVENT_FETCH'
+export const EVENT_FETCH_LOADING          = 'EVENT_FETCH_LOADING'
+export const EVENT_DETAIL_VISIBLE         = 'EVENT_DETAIL_VISIBLE'
+export const EVENT_DETAIL                 = 'EVENT_DETAIL'
+export const EVENT_DETAIL_LOADING         = 'EVENT_DETAIL_LOADING'
+export const EVENT_UPDATE                 = 'EVENT_UPDATE'
+export const EVENT_UPDATE_LOADING         = 'EVENT_UPDATE_LOADING'
+export const EVENT_DELETE                 = 'EVENT_DELETE'
+export const EVENT_DELETE_VISIBLE_CONFIRM = 'EVENT_DELETE_VISIBLE_CONFIRM'
+export const EVENT_DELETE_LOADING         = 'EVENT_DELETE_LOADING'
+

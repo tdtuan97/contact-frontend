@@ -1,0 +1,22 @@
+@import "views/Login/style";
+@import "views/Register/style";
+
+.feature-auth-login, .feature-auth-reset{
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 48px;
+    background-color: rgba(255, 255, 255, 0.39);
+    border-radius: $borderRadius;
+}
+
+.form-message {
+    text-align: center;
+    font-weight: bold;
+    color: red;
+    margin-bottom: $distanceComponent;
+}
+
+.form-option {
+    margin-top: $distanceComponent;
+    text-align: right;
+}

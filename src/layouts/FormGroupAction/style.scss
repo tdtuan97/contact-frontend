@@ -1,0 +1,11 @@
+.group-action{
+    padding-top: $distanceBlock;
+    border-top: 1px solid $colorBorder;
+    .action-item{
+        display: inline-block;
+        margin-right: $distanceComponent;
+        &:last-child{
+            margin-right: unset;
+        }
+    }
+}

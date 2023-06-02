@@ -1,0 +1,165 @@
+.sub-header {
+    padding: 0;
+    height: 38px;
+    line-height: 38px;
+    width: 100%;
+    z-index: 100;
+    right: 0;
+    position: fixed;
+    top: 48px;
+    transition: width .3s cubic-bezier(.645, .045, .355, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .5);
+
+    .sub-header-content {
+        background-color: $colorPrimaryLight;
+        position: relative;
+        display: flex;
+
+        .sub-header-space {
+            flex: 1 1 0;
+        }
+
+        .sub-logo {
+            height: 42px;
+            //text-align: center;
+            line-height: 42px;
+            font-size: 22px;
+            color: $colorWhite;
+            width: 208px;
+            transition: background 0.3s, width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
+            //cursor: pointer;
+
+            text-align: left;
+            padding-left: 24px;
+            img{
+                height: 32px;
+                margin-bottom: 6px;
+            }
+        }
+
+        .sub-logo.collapsed {
+            width: 64px;
+            //font-size: 16px;
+            //padding-left: 16px;
+            text-align: center;
+
+            img{
+                //display: none;
+                height: 32px;
+            }
+        }
+
+        .sub-header-control {
+            margin-left: 16px;
+            display: flex;
+            align-items: center;
+            line-height: 35px;
+
+            /*.menu-toggle{
+                color: $colorWhite;
+                line-height: 42px;
+                font-size: 22px;
+                margin-left: $distanceComponent;
+            }*/
+
+            .scope-data-box {
+                position: relative;
+
+                .data-scope-box {
+                    background-color: #5e491f;
+                    color: #fff;
+                    border-radius: 4px;
+                    padding: 0 16px;
+                    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+                    cursor: pointer;
+                    min-width: 525px;
+                    max-width: 525px;
+                    text-transform: uppercase;
+                    @include hide-text-overflow();
+                    font-size: 16px;
+                    //font-weight: bold;
+
+                    animation: attention 7s linear infinite;
+                }
+
+                .search-box {
+                    padding: $distanceComponent $distanceComponent 0;
+                    position: absolute;
+                    width: 100%;
+                    left: 0;
+                    box-shadow: 5px 5px 5px rgba(0, 0, 0, .1);
+                    opacity: 1;
+                    z-index: 100;
+                    background-color: white;
+                    border-radius: 1px 3px 3px 1px;
+
+                    .search-suggest {
+                        padding: 0 12px 12px 12px;
+                        top: -500;
+                        left: -500;
+
+                        .item-suggest {
+                            line-height: 24px;
+                            height: 24px;
+                        }
+
+                        .portfolio {
+                            button {
+                                line-height: 18px;
+                                padding: 0;
+
+                                font-weight: bold;
+                                border: none;
+                            }
+
+                            .site {
+                                margin-left: 24px;
+
+                                .plant {
+                                    margin-left: 24px;
+
+                                    button {
+                                        font-weight: unset;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    @include transition-fade-in()
+                }
+
+                .search-box.hide {
+                    opacity: 0;
+                    z-index: 0;
+                    top: -500px;
+                    left: -500px;
+
+                    @include transition-fade-out()
+                }
+            }
+
+            .scope-data-steps {
+                margin-left: 12px;
+
+                .ant-steps-icon {
+                    color: $colorWhite;
+                }
+
+                .ant-steps-navigation {
+                    padding-top: unset;
+                }
+
+                .select-scope-data {
+                    .ant-select-selector {
+                        border-radius: 2px;
+                    }
+
+                    min-width: 150px;
+                }
+            }
+        }
+    }
+}
+

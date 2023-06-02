@@ -1,0 +1,16 @@
+.data-error-wrapper {
+    text-align: center;
+    padding: $distanceBlock 0;
+    display: block;
+    width: 100%;
+
+    .error-title {
+        @include set-font($fontSizeMedium, $lineHeightMedium, $colorDanger);
+        margin-bottom: $distanceItem;
+    }
+
+    .error-description {
+        font-style: italic;
+        color: $colorGray;
+    }
+}

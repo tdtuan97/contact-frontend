@@ -1,0 +1,43 @@
+.footer-wrapper {
+    background: #001529;
+    overflow: hidden;
+    position: relative;
+    color: #999;
+    width: 100%;
+
+    .footer {
+        .block {
+            padding: 0 32px;
+
+            h2 {
+                color: #fff;
+            }
+
+            a {
+                color: #999;
+                margin-bottom: $distanceComponent;
+                float: left;
+                clear: both;
+            }
+
+            .logo {
+                max-width: 180px;
+                margin-bottom: 24px;
+            }
+
+            .slogan {
+                font-size: 12px;
+                margin-top: -20px;
+            }
+        }
+
+        .home-page {
+            padding: 64px $distanceComponent 64px;
+            height: 100%;
+            max-width: 1200px;
+            position: relative;
+            margin: auto;
+            will-change: transform;
+        }
+    }
+}

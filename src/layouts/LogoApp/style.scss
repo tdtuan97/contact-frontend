@@ -1,0 +1,19 @@
+.logo-app {
+    display: inline-block;
+    position: relative;
+    height: 42px;
+    line-height: 42px;
+    font-size: 22px;
+    transition: background 0.3s, width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
+    text-align: left;
+    background-color: $colorPrimaryLight;
+    width: 105px;
+    border-radius: 6px;
+
+    img {
+        height: 32px;
+        position: absolute;
+        left: 10px;
+        top: 4px;
+    }
+}

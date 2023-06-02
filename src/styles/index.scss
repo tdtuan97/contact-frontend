@@ -1,0 +1,88 @@
+// index is the entry for all styles.
+//@import 'antd.css';
+@import 'variables';
+@import 'mixins';
+@import 'global';
+
+.ant-divider-horizontal {
+    margin: 6px 0;
+}
+
+.group-gauges {
+    .group-title {
+        font-size: 14px;
+    }
+
+    .group-value {
+        .left-value {
+            font-size: 28px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+
+            .wrap-value {
+                width: 100%;
+                display: flex;
+
+                .value {
+                    width: 50%;
+                    text-align: right;
+                }
+
+                .unit {
+                    width: auto;
+                    text-align: left;
+                    padding-left: 6px;
+                    font-size: 16px;
+                    //margin-top: 15px;
+                    div {
+                        margin-top: 19px;
+
+                        &:first-child {
+                            margin-top: 14px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .right-value {
+            padding-left: 12px;
+
+            .group-item {
+                margin-bottom: 9px;
+
+                &:last-child {
+                    margin-bottom: unset;
+                }
+
+                .label {
+                    font-size: 11px;
+                    color: $colorGray;
+                }
+
+                .value {
+                    font-size: 16px;
+
+                    span {
+                        color: $colorGray;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Layout
+@import "../layouts/style";
+
+// Auth
+@import "../features/Auth/style";
+
+// App
+@import "../features/Exceptions/style";
+@import "../features/Common/style";
+@import "../features/Dashboard/style";
+
+
+

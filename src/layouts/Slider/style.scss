@@ -1,0 +1,25 @@
+.left-slider {
+    padding-top: 45px;
+    overflow-y: auto;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: $colorWhite;
+
+    .menu-account {
+        //position: fixed;
+        width: 208px;
+        bottom: 12px;
+        left: 0;
+    }
+
+    .menu-account.sub-collapsed {
+        text-align: center;
+
+        .ant-menu-item-group-title {
+            display: none;
+        }
+    }
+}

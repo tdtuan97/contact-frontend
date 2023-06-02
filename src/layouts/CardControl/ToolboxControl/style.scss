@@ -1,0 +1,17 @@
+.card-toolbox {
+    width: auto;
+    display: flex;
+    align-items: baseline;
+
+    .toolbox-control {
+        margin-left: 4px;
+
+        &:first-child {
+            margin-left: unset;
+        }
+    }
+
+    .datetime-control {
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,87 @@
+.page-header {
+    padding: 0;
+    height: 48px;
+    line-height: 48px;
+    width: 100%;
+    z-index: 100;
+    right: 0;
+    position: fixed;
+    top: 0;
+    transition: width .3s cubic-bezier(.645, .045, .355, 1);
+
+    .page-header-content {
+        background-color: $colorWhite;
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+
+        .logo {
+            position: relative;
+            overflow: hidden;
+            height: 48px;
+            width: 208px;
+            min-width: 208px;
+        }
+
+        .page-header-control {
+            align-items: center;
+            display: flex;
+            //gap: 8px;
+            width: 100%;
+            padding-right: 16px;
+
+            .status-control {
+                .group-status{
+                    display: inline-block;
+                    margin-left: 16px;
+                    .group-item{
+                        padding: 3px;
+                        border: 1px solid $colorBorder;
+                        margin-left: 3px;
+                        border-radius: 2px;
+                    }
+                }
+            }
+
+            justify-content: space-between;
+
+            .action-control{
+                button{
+                    margin-right: 3px;
+
+                }
+            }
+        }
+    }
+}
+
+.page-header-menu-item {
+    clear: both;
+    margin: 0;
+    padding: 5px 12px;
+    color: rgba(0, 0, 0, .85);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all .3s;
+
+    .ant-dropdown-menu-title-content {
+        span {
+            margin-right: 8px;
+        }
+
+    }
+}
+
+.page-header-avatar {
+    margin-right: 8px;
+    color: var(--ant-primary-color);
+    vertical-align: top;
+    background: hsla(0, 0%, 100%, .85);
+}
+

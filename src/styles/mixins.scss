@@ -1,0 +1,49 @@
+@import "variables";
+
+@mixin set-font(
+    $fontSize: $fontSizeDefault,
+    $lineHeight: $lineHeightDefault,
+    $fontColor: #000000) {
+    font-size: $fontSize;
+    color: $fontColor;
+    line-height: $lineHeight;
+}
+
+@mixin box-shadow-default($color: rgba(50, 250, 255, .75)) {
+    //box-shadow: 0 0 10px $color;
+    box-shadow: 0 0 2px $colorPrimary;
+}
+
+@mixin border-default() {
+    border: 1px solid $colorBorder;
+}
+
+@mixin transition-default() {
+    transition: all linear 0.3s;
+}
+
+@mixin transition-default() {
+    transition: all linear 0.3s;
+}
+
+@mixin transition-fade-in() {
+    -ms-transition: opacity 0.3s ease-in;
+    -webkit-transition: opacity 0.3s ease-in;
+    -moz-transition: opacity 0.3s ease-in;
+    -o-transition: opacity 0.3s ease-in;
+    transition: opacity 0.3s ease-in;
+}
+
+@mixin transition-fade-out() {
+    -ms-transition: opacity 0.3s ease-out;
+    -webkit-transition: opacity 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
+}
+
+@mixin hide-text-overflow(){
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

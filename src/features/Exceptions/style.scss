@@ -1,0 +1,8 @@
+@import "components/style";
+
+.feature-exceptions {
+    max-width: 1200px;
+    margin: $headerHeight auto 0;
+    padding: $distanceBlock;
+    background-color: rgba(255, 255, 255, 0.39);
+}

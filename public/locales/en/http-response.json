@@ -1,0 +1,16 @@
+{
+    "status": {
+        "200": "OK",
+        "400": "Bad Request",
+        "401": "Unauthorized",
+        "404": "Not Found",
+        "500": "Internal Server Error"
+    },
+    "description": {
+        "200": "The request is OK",
+        "400": "The request cannot be fulfilled due to bad syntax",
+        "401": "The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided",
+        "404": "The requested page could not be found but may be available again in the future",
+        "500": "A generic error message, given when no more specific message is suitable"
+    }
+}
