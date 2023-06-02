@@ -67,7 +67,6 @@ class President extends Component {
         } = this.props;
 
         const pathname = router.location.pathname;
-        console.log(pathname)
 
         // Layout
         const collapsed = common.siderCollapsed;
