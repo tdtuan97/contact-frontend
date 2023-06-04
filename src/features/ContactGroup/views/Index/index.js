@@ -1,1 +1,1 @@
-export {default as Index} from './Container'
+export { default as Index } from './Container'

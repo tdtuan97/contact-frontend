@@ -5,6 +5,8 @@ import {PrivateRoute} from './PrivateRoute'
 import {ExceptionRoute} from './ExceptionRoute'
 import * as Auth from '@features/Auth'
 import * as Dashboard from '@features/Dashboard'
+import * as ContactGroup from '@features/ContactGroup'
+import * as Contact from '@features/Contact'
 import {ErrorPage} from "@features/Exceptions";
 
 class AllRoutes extends Component {
@@ -15,19 +17,28 @@ class AllRoutes extends Component {
                 <PublicRoute path="/register" layout='Auth'>
                     <Auth.Register/>
                 </PublicRoute>
-                <PublicRoute path="/password-request" layout='Auth'>
-                    <Auth.PasswordRequest/>
-                </PublicRoute>
-                <PublicRoute path="/password-reset" layout='Auth'>
-                    <Auth.PasswordReset/>
+                <PublicRoute path="/register-success" layout='Auth'>
+                    <Auth.RegisterSuccess/>
                 </PublicRoute>
 
                 <PrivateRoute
                     path="/"
                     exact={true}
-                    //redirectUrl={"/"}
                 >
                     <Dashboard.Index/>
+                </PrivateRoute>
+                <PrivateRoute
+                    path="/contact"
+                    exact={true}
+                >
+                    <Contact.Index/>
+                </PrivateRoute>
+
+                <PrivateRoute
+                    path="/contact-group"
+                    exact={true}
+                >
+                    <ContactGroup.Index/>
                 </PrivateRoute>
 
                 <ExceptionRoute path="*"><ErrorPage code={404}/></ExceptionRoute>

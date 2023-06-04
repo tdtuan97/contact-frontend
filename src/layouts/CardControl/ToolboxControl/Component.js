@@ -109,7 +109,7 @@ class CustomComponent extends Component {
                         </span> : null
                 }
 
-                <span className="toolbox-control full-screen-control">
+                {/*<span className="toolbox-control full-screen-control">
                 {
                     isActive ?
                         <AntButton
@@ -124,7 +124,7 @@ class CustomComponent extends Component {
                             onClick={() => this.onClickFullScreen()}
                         />
                 }
-                </span>
+                </span>*/}
             </div>
         )
     }

@@ -1,51 +1,49 @@
 import React, {Component} from 'react';
-import {Table} from 'antd';
-import {Link} from "react-router-dom";
-import helpers from "@ultis/helpers";
-
-const columns = [
-    {
-        title    : 'ID',
-        dataIndex: 'id',
-        sorter   : true,
-        render   : id => <Link to={'/products/detail/' + id}>{id}</Link>,
-        width    : '150px',
-        align    : 'center',
-    },
-    {
-        title    : 'Tên sản phẩm',
-        dataIndex: 'name',
-        sorter   : true,
-        width    : '40%',
-    },
-    {
-        title    : 'Đơn vị',
-        dataIndex: 'unit',
-    },
-    {
-        title    : 'Đơn giá',
-        dataIndex: 'price',
-        sorter   : true,
-        render   : price => helpers.formatCash(price),
-    },
-];
+import * as Components from "../../components";
+import {ModalConfirm} from "@layouts";
 
 class President extends Component {
     render() {
-        let {data, pagination, loading} = this.props;
+        const {
+                  isVisibleFormDetail,
+                  onClickNew,
+                  onClickEdit,
+                  onSubmitForm,
+                  onCloseForm,
+
+                  isVisibleDeleteConfirm,
+                  onShowConfirmDelete,
+                  onCloseConfirmDelete,
+                  onAcceptDelete,
+              } = this.props
         return (
-            <div className="features feature-product">
-                <Table
-                    columns={columns}
-                    rowKey={record => record.id}
-                    dataSource={data}
-                    pagination={pagination}
-                    loading={loading}
-                    onChange={(pagination, filters, sorter) => this.props.handleTableChanges(pagination, filters, sorter)
-                    }
-                />
+            <div className="features feature-home">
+                <h1 className="page-title">
+                    Contact Group Management
+                </h1>
+                <div>
+                    <Components.ContactGroupList
+                        onClickNew={onClickNew}
+                        onClickEdit={onClickEdit}
+                        onShowConfirmDelete={onShowConfirmDelete}
+                    />
+
+                    <Components.ContactGroupForm
+                        isVisibleFormDetail={isVisibleFormDetail}
+                        onSubmitForm={onSubmitForm}
+                        onCloseForm={onCloseForm}
+                    />
+
+                    <ModalConfirm
+                        onOk={onAcceptDelete}
+                        onCancel={onCloseConfirmDelete}
+                        visible={isVisibleDeleteConfirm}
+                        title="Delete group"
+                        message="Are you sure ?"
+                    />
+                </div>
             </div>
-        )
+        );
     }
 }
 

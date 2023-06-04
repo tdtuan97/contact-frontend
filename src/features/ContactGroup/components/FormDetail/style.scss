@@ -1,14 +1,14 @@
-.form-product {
-    .form-product-inline {
-        display: inline-block;
-        width: calc(50% - 6px);
-
-        .form-product-child {
-            width: 100%;
-        }
+.rule-form {
+    .btn-add-condition {
+        padding-left: 158px;
     }
 
-    .form-product-unit{
-        float: right;
+    .radio-item {
+        width: 100px;
+    }
+
+    .other-email {
+        font-style: italic;
+        color: $colorDanger;
     }
 }

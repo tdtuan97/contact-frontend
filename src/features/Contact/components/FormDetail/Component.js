@@ -1,115 +1,207 @@
 import React, {Component} from 'react';
-import {Select, Input} from 'antd';
+import {connect} from "react-redux";
+import {Divider, Drawer, Form, Select} from "antd";
 import {
-    AntCard,
-    AntForm,
+    AntButton,
     AntFormItem,
     AntInput,
-    AntInputNumber,
-    AntInputTextArea,
-    FormGroupAction, FormGroupActionBack, FormGroupActionDelete, FormGroupActionSave, FormGroupActionUpdate,
+    Loading
 } from "@layouts";
 
-class CustomComponent extends Component {
-    render() {
-        const masters = ["Chiếc", "Kiện", "Kg", "Tạ", "Tấn",]
+const initValues = {
+    id          : null,
+    name        : "",
+    email       : "",
+    phone_number: "",
+    group_id    : null,
+}
 
+class CustomComponent extends Component {
+    formRef = React.createRef();
+
+    componentDidUpdate(prevProps) {
+        const prevDetail    = prevProps.contact.detail;
+        const currentDetail = this.props.contact.detail;
+
+        const prevUpdate    = prevProps.contact.update;
+        const currentUpdate = this.props.contact.update;
+
+        const prevCreate    = prevProps.contact.create;
+        const currentCreate = this.props.contact.create;
+
+        if (prevDetail.data.id !== currentDetail.data.id) {
+            let data = currentDetail.data;
+            if (this.formRef.current) {
+                this.formRef.current.setFieldsValue({
+                    id          : data.id,
+                    name        : data.name ?? "",
+                    email       : data.email ?? "",
+                    phone_number: data.phone_number ?? "",
+                    group_id    : data.group_id ?? null,
+                })
+            }
+        }
+
+        // Update success => Close
+        if (prevUpdate.data.id !== currentUpdate.data.id) {
+            /*setTimeout(() => {
+                this.onCloseForm();
+            }, 1000)*/
+        }
+
+        // Update success => Close
+        if (prevCreate.data.id !== currentCreate.data.id) {
+            setTimeout(() => {
+                this.onCloseForm();
+            }, 1000)
+        }
+    }
+
+    onCloseForm = () => {
+        this.resetForm();
+        this.props.onCloseForm();
+    }
+
+    resetForm = () => {
+        if (this.formRef.current) {
+            this.formRef.current.setFieldsValue({
+                ...initValues
+            })
+        }
+    }
+
+    render() {
         let {
-                formLoading,
-                data,
-                errors,
-                createLoading,
-                updateLoading,
-                deleteLoading,
-                onShowConfirmDelete,
-                isDetail
+                onSubmitForm,
+                isVisibleFormDetail,
+                contact,
+                masterData,
             } = this.props
 
-        errors = errors !== undefined ? errors : {};
-        data   = data !== undefined ? data : {};
+        let {create, detail, update} = contact;
+        let dataDetail               = detail.data ?? {};
 
-        const {name, price, unit, description} = data;
+        const isDetail = !!dataDetail.id
 
-        formLoading      = formLoading === true;
-        const form_title = isDetail === true ? "Chi tiết sản phẩm" : "Thêm sản phẩm";
+        // Response data
+        const updateLoading = update.loading;
+        const createLoading = create.loading;
+        const formTitle     = isDetail ? `Contact #${dataDetail.id}` : "New Contact";
+        let errors          = isDetail ? update.errors : create.errors;
+
+        errors = errors ?? {};
+
+        const loadingDetail = detail.loading;
+
+        let selectGroupsData = masterData.listContactGroup.data ?? {};
+        selectGroupsData = selectGroupsData.list ?? [];
+        let selectGroupsLoading = masterData.listContactGroup.loading;
         return (
-            <AntCard
-                title={form_title}
-                bordered={true}
-                loading={formLoading}
+            <Drawer
+                width={800}
+                placement="right"
+                maskClosable={false}
+                onClose={this.onCloseForm}
+                visible={isVisibleFormDetail}
+                title={formTitle}
             >
-                <AntForm
-                    className="form-center form-product"
-                    layout="vertical"
-                    onFinish={(data => this.props.onFinish(data))}
-                    initialValues={{name: name, price: price, unit: unit, description: description}}
+                {loadingDetail ? <Loading overwrite/> : null}
+                <Form
+                    className="form-center form-custom"
+                    onFinish={(data => onSubmitForm(data))}
+                    labelCol={{span: 4}}
+                    wrapperCol={{span: 20}}
+                    ref={this.formRef}
+                    initialValues={initValues}
                 >
                     <AntFormItem
-                        required={true}
-                        label="Tên sản phẩm"
-                        name="name"
-                        value={name}
-                        errors={errors.name}
+                        hidden={true}
+                        name="id"
                     >
                         <AntInput/>
                     </AntFormItem>
                     <AntFormItem
-                        className="form-product-inline"
                         required={true}
-                        label="Giá (VNĐ)"
-                        name="price"
-                        errors={errors.price}
+                        label="Contact Name"
+                        name="name"
+                        errors={errors.name}
                     >
-                        <AntInputNumber addonAfter={"VNĐ"} className="form-product-child"/>
+                        <AntInput placeholder="Enter contact name"/>
                     </AntFormItem>
                     <AntFormItem
-                        className="form-product-inline form-product-unit"
                         required={true}
-                        label="Đơn vị"
-                        name="unit"
-                        errors={errors.unit}
+                        label="Phone Number"
+                        name="phone_number"
+                        errors={errors.phone_number}
                     >
-                        <Select placeholder="Chọn đơn vị" className="form-product-child" >
+                        <AntInput placeholder="Enter contact phone number"/>
+                    </AntFormItem>
+                    <AntFormItem
+                        required={true}
+                        label="Email"
+                        name="email"
+                        errors={errors.email}
+                    >
+                        <AntInput placeholder="Enter contact email"/>
+                    </AntFormItem>
+                    <AntFormItem
+                        label="Group"
+                        name="group_id"
+                        errors={errors.group_id}
+                    >
+                        <Select
+                            allowClear={true}
+                            loading={selectGroupsLoading}
+                            placeholder={"Select group"}
+                        >
                             {
-                                masters.map((value, index, array) => {
-                                    return (
-                                        <Select.Option value={value} key={index}>{value}</Select.Option>
-                                    )
-                                })
+                                selectGroupsData ?
+                                    selectGroupsData.map((item, index) => {
+                                        return (
+                                            <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
+                                        )
+                                    }) : null
                             }
                         </Select>
                     </AntFormItem>
-
-                    <AntFormItem
-                        label="Mô tả"
-                        name="description"
-                        errors={errors.description}
-                    >
-                        <AntInputTextArea rows={10}/>
-                    </AntFormItem>
-                    <AntFormItem className="text-center">
-                        {isDetail
-                            ?
-                            <FormGroupAction>
-                                <FormGroupActionUpdate loading={updateLoading}/>
-                                <FormGroupActionDelete
-                                    htmlType="button"
-                                    onClick={onShowConfirmDelete}
-                                    loading={deleteLoading}/>
-                                <FormGroupActionBack/>
-                            </FormGroupAction>
-                            :
-                            <FormGroupAction>
-                                <FormGroupActionSave loading={createLoading}/>
-                                <FormGroupActionBack/>
-                            </FormGroupAction>
+                    <Divider style={{marginBlock: 24}}/>
+                    <div className="text-center group-button">
+                        {
+                            dataDetail.id ?
+                                <AntButton
+                                    className="btn-primary"
+                                    htmlType="submit"
+                                    loading={updateLoading}
+                                >
+                                    Update
+                                </AntButton> :
+                                <AntButton
+                                    className="btn-success"
+                                    htmlType="submit"
+                                    loading={createLoading}
+                                >
+                                    Save
+                                </AntButton>
                         }
+                        <AntButton
+                            onClick={this.onCloseForm}
+                        >
+                            Cancel
+                        </AntButton>
+                    </div>
+                </Form>
 
-                    </AntFormItem>
-                </AntForm>
-            </AntCard>
+            </Drawer>
         )
     }
 }
 
-export default CustomComponent
+function mapStateToProps(state) {
+    return {
+        common    : state.common,
+        masterData: state.masterData,
+        contact   : state.contact,
+    }
+}
+
+export default connect(mapStateToProps, {})(CustomComponent)

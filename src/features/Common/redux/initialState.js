@@ -5,24 +5,24 @@ const initialState = {
     browserFullScreen: {
         isActive: window.innerHeight === window.screen.height
     },
-    fullScreen       : {
-        isActive : false,
+    fullScreen: {
+        isActive: false,
         elementId: '',
-        class    : '',
+        class: '',
     },
-    siderCollapsed   : false,
-    randomColor      : helpers.getRandomColor(),
-    timeZone         : -(new Date().getTimezoneOffset() / 60),
-    searchData       : {
-        loading      : false,
-        sites        : [],
-        displayMenu  : false,
+    siderCollapsed: false,
+    randomColor: helpers.getRandomColor(),
+    timeZone: -(new Date().getTimezoneOffset() / 60),
+    searchData: {
+        loading: false,
+        sites: [],
+        displayMenu: false,
         portfolioList: [],
 
         // Data of search box
         portfolioIdSelected: null,
-        siteIdSelected  : null,
-        plantIdSelected : null,
+        siteIdSelected: null,
+        plantIdSelected: null,
     },
 };
 

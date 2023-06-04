@@ -22,14 +22,12 @@ class President extends Component {
         return [
             getItem(<Link to={dashboardRoute}>Dashboard</Link>, dashboardRoute,
                 <DashboardOutlined/>),
-            getItem('Contact', 'contact', <ContactsOutlined />, [
+            /*getItem('Contact', 'contact', <ContactsOutlined />, [
                 getItem(<Link to={contactListRoute}>List</Link>, contactListRoute),
                 getItem(<Link to={contactCreateRoute}>Create</Link>, contactCreateRoute),
-            ]),
-            getItem('Contact Group', 'contact-group', <GroupOutlined />, [
-                getItem(<Link to={contactGroupListRoute}>List</Link>, contactGroupListRoute),
-                getItem(<Link to={contactGroupCreateRoute}>Create</Link>, contactGroupCreateRoute),
-            ]),
+            ]),*/
+            getItem(<Link to={contactListRoute}>Contact</Link>, contactListRoute, <ContactsOutlined />),
+            getItem(<Link to={contactGroupListRoute}>Contact Group</Link>, contactGroupListRoute, <GroupOutlined />),
         ];
     }
 
@@ -89,6 +87,14 @@ class President extends Component {
             case pathname === "/":
                 selectDefault = dashboardRoute
                 break;
+            case pathname.indexOf(contactGroupListRoute) !== -1:
+                //openDefault = 'contact-group'
+                selectDefault = contactGroupListRoute
+                break;
+            //case pathname.indexOf(contactGroupCreateRoute) !== -1:
+            //    openDefault = 'contact-group'
+            //    selectDefault = contactGroupCreateRoute
+            //    break;
             case pathname.indexOf(contactListRoute) !== -1:
                 openDefault = 'contact'
                 selectDefault = contactListRoute
@@ -96,14 +102,6 @@ class President extends Component {
             case pathname.indexOf(contactCreateRoute) !== -1:
                 openDefault = 'contact'
                 selectDefault = contactCreateRoute
-                break;
-            case pathname.indexOf(contactGroupListRoute) !== -1:
-                openDefault = 'contact-group'
-                selectDefault = contactGroupListRoute
-                break;
-            case pathname.indexOf(contactGroupCreateRoute) !== -1:
-                openDefault = 'contact-group'
-                selectDefault = contactGroupCreateRoute
                 break;
             default:
                 break;
@@ -123,11 +121,11 @@ class President extends Component {
                     defaultOpenKeys={collapsed ? [] : [openDefault]}
                     selectable={true}
                     items={this.renderMenuItems({
-                        "dashboardRoute": dashboardRoute,
-                        "contactListRoute": contactListRoute,
-                        "contactCreateRoute": contactCreateRoute,
-                        "contactGroupListRoute": contactGroupListRoute,
-                        "contactGroupCreateRoute": contactGroupCreateRoute,
+                        dashboardRoute: dashboardRoute,
+                        contactListRoute: contactListRoute,
+                        contactCreateRoute: contactCreateRoute,
+                        contactGroupListRoute: contactGroupListRoute,
+                        contactGroupCreateRoute: contactGroupCreateRoute,
                     })}
                 />
                 <Menu

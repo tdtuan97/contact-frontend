@@ -1,0 +1,1 @@
+export {default as RegisterSuccess} from './Container'

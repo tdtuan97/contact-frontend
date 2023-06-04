@@ -1,15 +1,15 @@
 import initialState from "./initialState";
 import * as CONSTANTS from './constants'
-import {LOCATION_CHANGE} from "connected-react-router";
-import {PERMISSIONS} from "@routes/middleware";
+import { LOCATION_CHANGE } from "connected-react-router";
+import { PERMISSIONS } from "@routes/middleware";
 import helpers from "@ultis/helpers";
 
 export function reducer(state = initialState, action) {
     switch (action.type) {
         case LOCATION_CHANGE:
             const locationPayload = action.payload ?? {};
-            const pathname        = locationPayload.location.pathname;
-            let isClear           = false
+            const pathname = locationPayload.location.pathname;
+            let isClear = false
             for (let permissionsKey in PERMISSIONS) {
                 if (PERMISSIONS[permissionsKey] === helpers.trimChar(pathname, "/")) {
                     isClear = true
@@ -24,9 +24,9 @@ export function reducer(state = initialState, action) {
             if (isClear) {
                 searchData = {
                     ...searchData,
-                    siteIdSelected   : null,
-                    siteNameSelected : '',
-                    plantIdSelected  : null,
+                    siteIdSelected: null,
+                    siteNameSelected: '',
+                    plantIdSelected: null,
                     plantNameSelected: '',
                 }
             }
@@ -37,9 +37,9 @@ export function reducer(state = initialState, action) {
                     ...searchData
                 },
                 fullScreen: {
-                    isActive : false,
+                    isActive: false,
                     elementId: '',
-                    class    : '',
+                    class: '',
                 },
             };
 
@@ -68,18 +68,18 @@ export function reducer(state = initialState, action) {
             return {
                 ...state,
                 fullScreen: {
-                    isActive : true,
+                    isActive: true,
                     elementId: action.payload,
-                    class    : 'full-screen',
+                    class: 'full-screen',
                 }
             };
         case CONSTANTS.EXIT_FULL_SCREEN_ACTION:
             return {
                 ...state,
                 fullScreen: {
-                    isActive : false,
+                    isActive: false,
                     elementId: '',
-                    class    : '',
+                    class: '',
                 }
             };
         case CONSTANTS.TOGGLE_SIDER_ACTION:
@@ -106,17 +106,17 @@ export function reducer(state = initialState, action) {
             };
         case CONSTANTS.SELECT_DATA_SEARCH_ACTION:
             let portfolioIdSelected = action.payload.portfolioId
-            let siteIdSelected      = action.payload.siteId
-            let plantIdSelected     = action.payload.plantId
+            let siteIdSelected = action.payload.siteId
+            let plantIdSelected = action.payload.plantId
 
             return {
                 ...state,
                 searchData: {
                     ...state.searchData,
                     portfolioIdSelected: portfolioIdSelected,
-                    siteIdSelected     : siteIdSelected,
-                    plantIdSelected    : plantIdSelected,
-                    displayMenu        : false
+                    siteIdSelected: siteIdSelected,
+                    plantIdSelected: plantIdSelected,
+                    displayMenu: false
                 }
             };
         case CONSTANTS.TOGGLE_MENU_ACTION:
@@ -134,7 +134,7 @@ export function reducer(state = initialState, action) {
                     ...state.searchData,
 
                     // Set default data
-                    siteIdDefault : action.payload.siteIdDefault,
+                    siteIdDefault: action.payload.siteIdDefault,
                     plantIdDefault: action.payload.plantIdDefault,
                 }
             };
@@ -144,7 +144,7 @@ export function reducer(state = initialState, action) {
 }
 
 function getScopeSelected(sites, siteIdDefault, plantIdDefault) {
-    let siteNameDefault  = null;
+    let siteNameDefault = null;
     let plantNameDefault = null;
 
     if (sites.length > 0) {
@@ -153,13 +153,13 @@ function getScopeSelected(sites, siteIdDefault, plantIdDefault) {
             sites.forEach(site => {
                 let plantFind = site.plants.find(plant => plant.id === plantIdDefault)
                 if (plantFind) {
-                    siteIdDefault    = site.id
-                    siteNameDefault  = site.name
+                    siteIdDefault = site.id
+                    siteNameDefault = site.name
                     plantNameDefault = plantFind.name
                 }
             })
         } else if (siteDefault) {
-            siteNameDefault  = siteDefault.name
+            siteNameDefault = siteDefault.name
             let plantDefault = siteDefault.plants.find(plant => plant.id === plantIdDefault)
             if (plantDefault) {
                 plantNameDefault = plantDefault.name
@@ -168,7 +168,7 @@ function getScopeSelected(sites, siteIdDefault, plantIdDefault) {
     }
 
     return {
-        siteNameSelected : siteNameDefault,
+        siteNameSelected: siteNameDefault,
         plantNameSelected: plantNameDefault,
     }
 }

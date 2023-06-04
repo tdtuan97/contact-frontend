@@ -15,11 +15,11 @@ class Container extends Component {
     }
 
     render() {
-        const {user, configs} = this.props.auth;
+        const {user} = this.props.auth;
 
         if (user.id !== null && user.id !== undefined) {
             return (
-                <Redirect to={configs.homepage}/>
+                <Redirect to={"/"}/>
             )
         }
 

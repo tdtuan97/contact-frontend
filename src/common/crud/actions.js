@@ -249,7 +249,7 @@ export function reject(dispatch, reason, callback) {
     Response action
  */
 function responseAction(response) {
-    const data = response.data
+    const data = response.data ?? {}
 
     const payload = {
         data      : data.data !== undefined ? data.data : [],

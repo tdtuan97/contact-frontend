@@ -1,1 +1,1 @@
-export {default as FormDetail} from './Component'
+export { default as ContactGroupForm } from './Component'

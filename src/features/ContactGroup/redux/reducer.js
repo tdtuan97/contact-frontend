@@ -1,150 +1,164 @@
 import initialState from "./initialState";
 import * as CONSTANTS from "./constants";
-import {LOCATION_CHANGE} from "connected-react-router";
 import * as CONSTANTS_COMMON from "@features/Common/redux/constants";
+import {pushMessageSuccess} from "@layouts";
+import {CODE_SUCCESS} from "@common/crud";
 
 export function reducer(state = initialState, action) {
-    let payload = action.payload;
+    let payload = action.payload ?? {};
     switch (action.type) {
+        /**
+         * Reset action
+         */
         case CONSTANTS_COMMON.RESET_ACTION:
             return {
                 ...state,
                 ...initialState
             }
 
-        case CONSTANTS.EVENT_FETCH:
-            payload  = payload ?? {}
-            let data = payload.data ?? {}
-            let meta = data.meta ?? {}
+        /**
+         * Reset action
+         */
+        case CONSTANTS.CLEAR_FORM_CONTACT_GROUP:
+            return {
+                ...state,
+                detail: {
+                    ...state.detail,
+                    ...initialState.detail
+                },
+                create: {
+                    ...state.create,
+                    ...initialState.create
+                },
+                update: {
+                    ...state.update,
+                    ...initialState.update
+                },
+            }
+
+        /**
+         * Get list
+         */
+        case CONSTANTS.GET_CONTACT_GROUP_LIST:
             return {
                 ...state,
                 list: {
-                    data      : data.items ?? [],
-                    pagination: {
-                        current : meta.current ?? 0,
-                        pageSize: meta.pageSize ?? 0,
-                        total   : meta.total ?? 0,
-                    },
-                    loading   : false,
+                    ...state.list,
+                    loading: false,
+                    data   : payload ? payload.data : [],
                 },
-            };
-        case CONSTANTS.EVENT_FETCH_LOADING:
+            }
+        case CONSTANTS.GET_CONTACT_GROUP_LIST_LOADING:
             return {
                 ...state,
                 list: {
                     ...state.list,
                     loading: true,
-                }
+                },
             }
-        case CONSTANTS.EVENT_DETAIL:
+
+        /**
+         * Get detail
+         */
+        case CONSTANTS.GET_CONTACT_GROUP_DETAIL:
             return {
                 ...state,
                 detail: {
                     ...state.detail,
                     loading: false,
-                    errors : payload.errors,
-                    data   : payload.data,
-                    id     : payload.data.id,
-                    isFound: payload.data.id !== undefined && payload.data.id !== null,
+                    data   : payload.data ?? {},
+                    errors : payload.errors ?? {},
                 },
-            };
-        case CONSTANTS.EVENT_DETAIL_LOADING:
+            }
+        case CONSTANTS.GET_CONTACT_GROUP_DETAIL_LOADING:
             return {
                 ...state,
                 detail: {
                     ...state.detail,
                     loading: true,
-                    errors : {},
-                    data   : {},
-                    id     : null,
-                    isFound: true,
-                }
-            }
-        case CONSTANTS.EVENT_DETAIL_VISIBLE: {
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    loading     : true,
-                    errors      : {},
-                    data        : {},
-                    id          : null,
-                    isFound     : true,
-                    modalVisible: payload,
-                }
-            }
-        }
-        case CONSTANTS.EVENT_UPDATE:
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    loading: false,
-                    errors : payload.errors,
-                    data   : payload.data,
-                    update : {
-                        ...state.detail.update,
-                        modalVisible: false,
-                        loading     : false,
-                    }
-                }
-            };
-        case CONSTANTS.EVENT_UPDATE_LOADING:
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    update: {
-                        ...state.detail.update,
-                        modalVisible: false,
-                        loading     : true,
-                    }
-                }
-            }
-        case CONSTANTS.EVENT_DELETE:
-            let errors = payload.errors ?? [];
-            return {
-                ...state,
-                delete: {
-                    ...state.delete,
-                    errors      : errors,
-                    modalVisible: false,
-                    loading     : false,
-                    isDeleted   : errors === 0,
-                }
-            };
-        case CONSTANTS.EVENT_DELETE_LOADING:
-            return {
-                ...state,
-                delete: {
-                    ...state.delete,
-                    errors      : [],
-                    modalVisible: false,
-                    loading     : true,
-                    isDeleted   : false,
-                }
+                },
             }
 
-        case CONSTANTS.EVENT_DELETE_VISIBLE_CONFIRM: {
+        /**
+         * Create
+         */
+        case CONSTANTS.CREATE_CONTACT_GROUP:
+            if (payload.code === CODE_SUCCESS) {
+                pushMessageSuccess("Create success.");
+            }
+            return {
+                ...state,
+                create: {
+                    ...state.create,
+                    loading: false,
+                    data   : payload.data ?? {},
+                    errors : payload.errors ?? {},
+                },
+            }
+        case CONSTANTS.CREATE_CONTACT_GROUP_LOADING:
+            return {
+                ...state,
+                create: {
+                    ...state.create,
+                    loading: true,
+                },
+            }
+
+        /**
+         * Update
+         */
+        case CONSTANTS.UPDATE_CONTACT_GROUP:
+            if (payload.code === CODE_SUCCESS) {
+                pushMessageSuccess("Update success.");
+            }
+            return {
+                ...state,
+                update: {
+                    ...state.update,
+                    loading: false,
+                    data   : payload.data ?? {},
+                    errors : payload.errors ?? {},
+                },
+            }
+        case CONSTANTS.UPDATE_CONTACT_GROUP_LOADING:
+            return {
+                ...state,
+                update: {
+                    ...state.update,
+                    loading: true,
+                },
+            }
+
+        /**
+         * Delete
+         */
+        case CONSTANTS.DELETE_CONTACT_GROUP:
+            let isDeleted = false;
+            if (payload.code === CODE_SUCCESS) {
+                pushMessageSuccess("Delete success.");
+                isDeleted = true;
+            }
             return {
                 ...state,
                 delete: {
                     ...state.delete,
-                    errors      : [],
-                    modalVisible: payload,
-                    loading     : false,
-                    isDeleted   : false,
-                }
+                    loading  : false,
+                    data     : payload.data ?? {},
+                    errors   : payload.errors ?? {},
+                    isDeleted: isDeleted
+                },
             }
-        }
-        case LOCATION_CHANGE:
+        case CONSTANTS.DELETE_CONTACT_GROUP_LOADING:
             return {
                 ...state,
                 delete: {
-                    ...initialState.delete,
-                }
+                    ...state.delete,
+                    loading  : true,
+                    isDeleted: false,
+                },
             }
+
         default:
-            return state
+            return state;
     }
 }

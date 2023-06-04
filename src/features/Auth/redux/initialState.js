@@ -1,23 +1,18 @@
 const initialState = {
-    user   : {
+    user    : {
         id       : null,
-        name     : null,
+        user_name: null,
         email    : null,
-        portfolio: {
-            id     : null,
-            logoUrl: null
-        }
     },
-    meta   : {
-        token      : null,
-        role       : null,
-        permissions: [],
+    meta    : {
+        token: null,
     },
-    configs: {
-        homepage: '/'
-    },
-    login  : {
+    login   : {
         loading: false,
+    },
+    register: {
+        loading: false,
+        success: false
     }
 };
 

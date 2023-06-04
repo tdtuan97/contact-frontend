@@ -1,33 +1,32 @@
 const initialState = {
     list: {
-        data      : [],
-        pagination: {
-            current : 1,
-            pageSize: 25,
-            total   : 0,
-        },
-        loading   : false,
+        data: [],
+        loading: false,
+    },
+
+    create: {
+        errors: {},
+        data: {},
+        loading: false,
     },
 
     detail: {
-        errors      : {},
-        data        : {},
-        loading     : false,
-        id          : null,
-        isFound     : true,
-        modalVisible: false,
+        errors: {},
+        data: {},
+        loading: false,
+    },
 
-        update: {
-            modalVisible: false,
-            loading     : false,
-        },
+    update: {
+        errors: {},
+        data: {},
+        loading: false,
     },
 
     delete: {
-        errors      : {},
-        modalVisible: false,
-        loading     : false,
-        isDeleted   : false,
+        data: {},
+        errors: {},
+        loading: false,
+        isDeleted: false,
     },
 };
 

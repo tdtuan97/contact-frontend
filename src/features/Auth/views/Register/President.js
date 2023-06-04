@@ -1,50 +1,72 @@
 import React, {Component} from 'react';
 import {Form, Input, Button} from "antd";
-import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import {UserOutlined, LockOutlined, MailOutlined, FileTextOutlined} from '@ant-design/icons';
 import {Link} from "react-router-dom";
+import {AntFormItem} from "@layouts";
 
 class President extends Component {
     render() {
-        const message = this.props.crud.message;
+        const {errors} = this.props.crud;
+
         return (
             <div className="feature-auth-reset">
-                <div className="form-message">
-                    {message}
-                </div>
                 <Form className="ant-form ant-form-vertical"
                       onFinish={(data => this.props.handleRegister(data))}
                 >
-                    <Form.Item name="username">
+                    <AntFormItem
+                        name="email"
+                        errors={errors.email}
+                    >
+                        <Input
+                            prefix={<MailOutlined className="site-form-item-icon"/>}
+                            placeholder="Email"
+                        />
+                    </AntFormItem>
+                    <AntFormItem
+                        name="username"
+                        errors={errors.username}
+                    >
                         <Input
                             prefix={<UserOutlined className="site-form-item-icon"/>}
                             placeholder="Username"
-                            size="large"
                         />
-                    </Form.Item>
-                    <Form.Item name="full_name">
+                    </AntFormItem>
+                    <AntFormItem
+                        name="first_name"
+                        errors={errors.first_name}
+                    >
                         <Input
-                            prefix={<UserOutlined className="site-form-item-icon"/>}
-                            placeholder="Full name"
-                            size="large"
+                            prefix={<FileTextOutlined className="site-form-item-icon"/>}
+                            placeholder="First name"
                         />
-                    </Form.Item>
-                    <Form.Item name="password">
+                    </AntFormItem>
+                    <AntFormItem
+                        name="last_name"
+                        errors={errors.last_name}
+                    >
+                        <Input
+                            prefix={<FileTextOutlined className="site-form-item-icon"/>}
+                            placeholder="Last name"
+                        />
+                    </AntFormItem>
+                    <AntFormItem
+                        name="password"
+                        errors={errors.password}
+                    >
                         <Input.Password
                             prefix={<LockOutlined className="site-form-item-icon"/>}
                             type="password"
                             placeholder="Password"
-                            size="large"
                         />
-                    </Form.Item>
-                    <Form.Item>
+                    </AntFormItem>
+                    <AntFormItem>
                         <Button type="primary"
                                 htmlType="submit"
-                                size="large"
                                 disabled={this.props.crud.pending}
                                 block>
                             Register
                         </Button>
-                    </Form.Item>
+                    </AntFormItem>
                 </Form>
                 <div className="form-option">
                     or <Link to={'/login'}>Login</Link>

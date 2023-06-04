@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
 import {
-    WifiOutlined,
-    BellFilled,
-    ThunderboltFilled,
-    LineOutlined,
     MenuOutlined,
     FullscreenOutlined,
     FullscreenExitOutlined,
@@ -11,7 +7,6 @@ import {
 import {Link} from "react-router-dom";
 import {Logo} from "../Logo";
 import logoApp from '@images/logo-app.png';
-import logoAppLite from '@images/logo-app-lite.png';
 import {AntButton} from "../AntButton";
 
 class President extends Component {

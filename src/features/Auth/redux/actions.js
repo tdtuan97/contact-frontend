@@ -2,7 +2,7 @@ import {
     LOGIN_LOADING,
     SET_TOKEN_ACTION,
     CLEAR_TOKEN_ACTION,
-    ARG_TOKEN, UPDATE_TOKEN_ACTION,
+    ARG_TOKEN, UPDATE_TOKEN_ACTION, REGISTER_LOADING_ACTION, REGISTER_ACTION,
 } from "./constants";
 import {
     CODE_SUCCESS
@@ -56,8 +56,23 @@ export function clearTokenAction() {
 }
 
 export function register(data) {
-    const url = process.env.REACT_APP_API_ENDPOINT + 'auth/register'
     return dispatch => {
-        return dispatch(apiPost(url, data, {}))
+        dispatch(registerLoadingAction())
+        return dispatch(apiPost('auth/register', data, {}, registerAction))
     }
+}
+
+
+export function registerLoadingAction() {
+    return {
+        type   : REGISTER_LOADING_ACTION,
+        payload: null
+    };
+}
+
+export function registerAction(data) {
+    return {
+        type   : REGISTER_ACTION,
+        payload: data
+    };
 }

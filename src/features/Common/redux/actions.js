@@ -1,5 +1,4 @@
 import * as CONSTANTS from './constants'
-import {apiGet} from "@common/crud";
 
 /**
  * Reset store
@@ -83,64 +82,3 @@ function browserExitFullScreenAction() {
     };
 }
 
-/* ============== Action when click Full screen / Exit full screen ============== */
-
-/* ============== Start Action change scope data ============== */
-export function fetchDataSearch(userId) {
-    return dispatch => {
-        dispatch(fetchDataSearchLoadingAction())
-        dispatch(apiGet('/overview/sites-update', {
-                "userId": userId,
-                "type": "searchList",
-            }, {}, fetchDataSearchAction)
-        )
-    }
-}
-
-function fetchDataSearchAction(response) {
-    return {
-        type: CONSTANTS.FETCH_DATA_SEARCH_ACTION,
-        payload: response.data
-    };
-}
-
-function fetchDataSearchLoadingAction() {
-    return {
-        type: CONSTANTS.FETCH_DATA_SEARCH_LOADING_ACTION,
-        payload: {
-            loading: true,
-        }
-    };
-}
-
-export function selectDataSearch(portfolioId, siteId, plantId) {
-    return dispatch => {
-        dispatch(selectDataSearchAction(portfolioId, siteId, plantId))
-    }
-}
-
-function selectDataSearchAction(portfolioId, siteId, plantId) {
-    return {
-        type: CONSTANTS.SELECT_DATA_SEARCH_ACTION,
-        payload: {
-            "portfolioId": portfolioId,
-            "siteId": siteId,
-            "plantId": plantId,
-        }
-    };
-}
-
-export function toggleMenu() {
-    return dispatch => {
-        dispatch(toggleMenuAction())
-    }
-}
-
-function toggleMenuAction() {
-    return {
-        type: CONSTANTS.TOGGLE_MENU_ACTION,
-        payload: null
-    };
-}
-
-/* ============== End Action change scope data ============== */
