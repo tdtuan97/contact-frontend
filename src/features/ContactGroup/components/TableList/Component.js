@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {AntButton, AntCard, ToolboxControl} from "@layouts";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
-import {Col, Input, Row, Table} from "antd";
+import {DeleteOutlined, EditOutlined, SearchOutlined} from "@ant-design/icons";
+import {Button, Col, Input, Row, Table} from "antd";
 import {withRouter} from "react-router-dom";
 import {
     getContactGroups,
@@ -13,8 +13,9 @@ class CustomComponent extends Component {
         super(props);
         this.state = {
             selectedId: null,
-            queries   : {
-                name: ""
+            queries: {
+                name: "",
+                description: ""
             }
         }
     }
@@ -27,24 +28,31 @@ class CustomComponent extends Component {
         this.setState({
             ...this.state,
             queries: {
+                ...this.state.queries,
                 name: e.currentTarget.value
             }
         })
     }
 
     /**
-     * On search
-     * @param text
+     * On change description
+     * @param e
      */
-    onSearch = (text) => {
+    onChangeDescription = (e) => {
         this.setState({
             ...this.state,
             queries: {
-                name: text
+                ...this.state.queries,
+                description: e.currentTarget.value
             }
-        }, this.props.getContactGroups({
-            name: text,
-        }))
+        })
+    }
+
+    /**
+     * On search
+     */
+    onSearch = () => {
+        this.props.getContactGroups(this.state.queries)
     }
 
     /**
@@ -59,39 +67,40 @@ class CustomComponent extends Component {
 
         // Order by
         let orderBy = sorter.order ?? "ascend";
-        orderBy     = orderBy === "ascend" ? 'ASC' : 'DESC';
+        orderBy = orderBy === "ascend" ? 'ASC' : 'DESC';
 
         // Paginate
         let page = pagination !== undefined ? pagination.current : 1;
         this.props.getContactGroups({
-            sortBy : sortBy,
-            orderBy: orderBy,
-            page   : page,
+            sort_by: sortBy,
+            order_by: orderBy,
+            page: page,
             ...filters,
             ...this.state.queries,
         });
     }
 
     render() {
-        const {contactGroup}  = this.props
-        const {list}          = contactGroup
+        const {contactGroup} = this.props
+        const {list} = contactGroup
         const {loading, data} = list
         const {
-                  onClickNew,
-                  onClickEdit,
-                  onShowConfirmDelete,
-              }               = this.props
+            onClickNew,
+            onClickEdit,
+            onShowConfirmDelete,
+        } = this.props
 
         let dataPagination = data.pagination ?? {}
-        let pagination     = {
-            current        : dataPagination.page ?? 1,
-            pageSize       : dataPagination.size ?? 15,
-            total          : dataPagination.total ?? 0,
+        let pagination = {
+            current: dataPagination.page ?? 1,
+            pageSize: dataPagination.size ?? 15,
+            total: dataPagination.total ?? 0,
             showSizeChanger: false,
-            size           : "default",
+            size: "default",
         }
 
         let searchText = this.state.queries.name;
+        let searchDescription = this.state.queries.description;
 
         return (
             <AntCard
@@ -113,19 +122,49 @@ class CustomComponent extends Component {
                     <div className="search-group">
                         <Row gutter={{xs: 8, sm: 12, md: 12}}>
                             <Col xs={24} xl={12}>
-                                <div className="search-input input-keyword">
-                                    {/*<span className="input-label">Keyword:</span>*/}
-                                    <Input.Search
-                                        placeholder="Search group by name"
-                                        //suffix={<SearchOutlined/>}
-                                        //value={searchText}
-                                        //onChange={this.onChangeName}
-                                        allowClear
-                                        enterButton
-                                        onChange={this.onChangeSearchText}
-                                        value={searchText}
-                                        onSearch={this.onSearch}
-                                    />
+                                <div className="search-input ">
+                                    <div className="input-label">Keyword:</div>
+                                    <div className="input-value">
+                                        <Input
+                                            placeholder="Search group by name"
+                                            allowClear
+                                            onChange={this.onChangeSearchText}
+                                            value={searchText}
+                                        />
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col xs={24} xl={12}>
+                                <div className="search-input ">
+                                    <div className="input-label">Description:</div>
+                                    <div className="input-value">
+                                        <Input
+                                            placeholder="Search group by description"
+                                            allowClear
+                                            onChange={this.onChangeDescription}
+                                            value={searchDescription}
+                                        />
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row gutter={{xs: 8, sm: 12, md: 12}}>
+                            <Col xs={{
+                                span: 12,
+                                offset: 6,
+                            }} xl={{
+                                span: 8,
+                                offset: 8,
+                            }}>
+                                <div className="search-button">
+                                    <Button
+                                        type="primary"
+                                        block={true}
+                                        icon={<SearchOutlined/>}
+                                        onClick={this.onSearch}
+                                    >
+                                        Search
+                                    </Button>
                                 </div>
                             </Col>
                         </Row>
@@ -148,29 +187,29 @@ class CustomComponent extends Component {
 const columns = (onShowDetail, showConfirmDelete) => {
     return [
         {
-            title    : 'ID',
+            title: 'ID',
             dataIndex: 'id',
         },
         {
-            title    : 'Group Name',
+            title: 'Group Name',
             dataIndex: 'name',
         },
         {
-            title    : 'Group Description',
+            title: 'Group Description',
             dataIndex: 'description',
         },
         {
-            title    : 'Created At',
+            title: 'Created At',
             dataIndex: 'created_at',
         },
         {
-            title    : 'Updated At',
+            title: 'Updated At',
             dataIndex: 'updated_at',
         },
         {
-            width : 100,
-            align : 'center',
-            title : 'Action',
+            width: 100,
+            align: 'center',
+            title: 'Action',
             render: (value, item) => <div className="group-button">
                 <AntButton
                     icon={<EditOutlined/>}
@@ -192,7 +231,7 @@ const columns = (onShowDetail, showConfirmDelete) => {
 
 function mapStateToProps(state) {
     return {
-        common      : state.common,
+        common: state.common,
         contactGroup: state.contactGroup,
     }
 }

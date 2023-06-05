@@ -7,8 +7,19 @@
         .input-label {
             font-weight: bold;
             margin-right: 6px;
-            min-width: 90px;
+            width: 130px;
+            white-space: nowrap;
+            text-align: right;
         }
+
+        .input-value {
+            width: 100%;
+        }
+    }
+
+    .search-button{
+        text-align: center;
+        margin-bottom: $distanceComponent;
     }
 }
 

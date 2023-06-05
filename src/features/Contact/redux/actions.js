@@ -9,13 +9,11 @@ import {apiDelete} from "@common/crud/actions";
  */
 export function getContacts(params = {}) {
     let queries = {
+        ...params,
         page : params.page ?? 1,
         limit: params.limit ?? 15,
     }
-    let name = params.name ?? "";
-    if (name){
-        queries.name = name
-    }
+
     return dispatch => {
         dispatch(getContactsLoadingAction())
         dispatch(apiGet(`contacts`, queries, {}, getContactsAction))

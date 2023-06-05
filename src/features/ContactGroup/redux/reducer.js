@@ -40,12 +40,14 @@ export function reducer(state = initialState, action) {
          * Get list
          */
         case CONSTANTS.GET_CONTACT_GROUP_LIST:
+            let listData = payload ? payload.data : {}
+            listData =  typeof listData === 'object' ? listData : {};
             return {
                 ...state,
                 list: {
                     ...state.list,
                     loading: false,
-                    data   : payload ? payload.data : [],
+                    data   : listData,
                 },
             }
         case CONSTANTS.GET_CONTACT_GROUP_LIST_LOADING:

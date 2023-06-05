@@ -90,23 +90,6 @@ export function mockup(mockData, callback, delay = 1000) {
 }
 
 /*
-    Fetch data by paginate
- */
-export function fetchPaginate(url, params = {}, callback = null) {
-    const {pagination} = params
-    const sort         = params.sortOrder !== undefined ? params.sortOrder : "ascend";
-    params             = {
-        sort : params.sortField !== undefined ? params.sortField : 'id',
-        order: sort === "ascend" ? 'ASC' : 'DESC',
-        page : pagination !== undefined ? pagination.current : 1,
-    }
-
-    return dispatch => {
-        dispatch(apiGet(url, params, {}, callback))
-    }
-}
-
-/*
     Get data
  */
 export function apiGet(endPoint = '', params = {}, config = {}, callback = null) {

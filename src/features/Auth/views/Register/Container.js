@@ -27,8 +27,6 @@ class Container extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.auth.register.success !== this.props.auth.register.success) {
             if (this.props.auth.register.success === true) {
-                console.log(this.props)
-                console.log(this.props.history)
                 this.props.history.push('/register-success');
             }
         }
