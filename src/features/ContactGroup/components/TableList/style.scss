@@ -27,3 +27,17 @@
     text-align: right;
     margin-bottom: $distanceComponent;
 }
+
+.share-zalo{
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    .zalo-share-button{
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        position: absolute;
+        left: 0;
+        z-index: 1;
+    }
+}

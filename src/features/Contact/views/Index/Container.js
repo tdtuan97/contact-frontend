@@ -17,9 +17,10 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isVisibleFormDetail   : false,
+            isVisibleFormDetail: false,
             isVisibleDeleteConfirm: false,
-            idSelected            : null,
+            isVisibleShareUser: false,
+            idSelected: null,
         }
     }
 
@@ -52,10 +53,10 @@ class Container extends Component {
         let id = data.id ?? null;
 
         let params = {
-            name        : data.name ?? "",
+            name: data.name ?? "",
             phone_number: data.phone_number ?? "",
-            email       : data.email ?? "",
-            group_id    : data.group_id ?? null,
+            email: data.email ?? "",
+            group_id: data.group_id ?? null,
         }
 
         // Create or Update
@@ -85,7 +86,7 @@ class Container extends Component {
         this.setState({
             ...this.state,
             isVisibleDeleteConfirm: true,
-            idSelected            : e.currentTarget.value
+            idSelected: e.currentTarget.value
         })
     }
 
@@ -96,8 +97,29 @@ class Container extends Component {
         this.setState({
             ...this.state,
             isVisibleDeleteConfirm: false,
-            idSelected            : null
+            idSelected: null
         })
+    }
+
+    onShowShareUser = (e) => {
+        this.setState({
+            ...this.state,
+            isVisibleShareUser: true
+        })
+
+        this.props.getContact(e.currentTarget.value);
+    }
+
+    onCloseShareUser = () => {
+        this.setState({
+            ...this.state,
+            isVisibleShareUser: false
+        })
+        this.props.clearFormContact();
+    }
+
+    onSubmitShareUser = (data) => {
+        // Todo
     }
 
     /**
@@ -118,7 +140,7 @@ class Container extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const prevDelete    = prevProps.contact.delete;
+        const prevDelete = prevProps.contact.delete;
         const currentDelete = this.props.contact.delete;
 
         // Delete success => Close
@@ -129,9 +151,10 @@ class Container extends Component {
 
     render() {
         const {
-                  isVisibleFormDetail,
-                  isVisibleDeleteConfirm
-              } = this.state
+            isVisibleFormDetail,
+            isVisibleDeleteConfirm,
+            isVisibleShareUser
+        } = this.state
         return (
             <President
                 {...this.props}
@@ -145,6 +168,11 @@ class Container extends Component {
                 onShowConfirmDelete={this.onShowConfirmDelete}
                 onCloseConfirmDelete={this.onCloseConfirmDelete}
                 onAcceptDelete={this.onAcceptDelete}
+
+                onShowShareUser={this.onShowShareUser}
+                onCloseShareUser={this.onCloseShareUser}
+                onSubmitShareUser={this.onSubmitShareUser}
+                isVisibleShareUser={isVisibleShareUser}
             />
         )
     }
@@ -152,25 +180,25 @@ class Container extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        resetStore         : () => {
+        resetStore: () => {
             dispatch(resetStore());
         },
-        clearFormContact   : () => {
+        clearFormContact: () => {
             dispatch(clearFormContact());
         },
-        getContacts        : (params = {}) => {
+        getContacts: (params = {}) => {
             dispatch(getContacts(params));
         },
-        getContact         : (id) => {
+        getContact: (id) => {
             dispatch(getContact(id));
         },
-        createContact      : (params) => {
+        createContact: (params) => {
             dispatch(createContact(params));
         },
-        updateContact      : (id, params) => {
+        updateContact: (id, params) => {
             dispatch(updateContact(id, params));
         },
-        deleteContact      : (id) => {
+        deleteContact: (id) => {
             dispatch(deleteContact(id));
         },
         getAllContactGroups: () => {
@@ -182,8 +210,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        router : state.router,
-        common : state.common,
+        router: state.router,
+        common: state.common,
         contact: state.contact,
     }
 }

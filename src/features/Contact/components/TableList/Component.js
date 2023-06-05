@@ -1,38 +1,38 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {AntButton, AntCard, ToolboxControl} from "@layouts";
-import {DeleteOutlined, EditOutlined, SearchOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Row, Select, Table, Tag} from "antd";
+import {DeleteOutlined, EditOutlined, SearchOutlined, ShareAltOutlined} from "@ant-design/icons";
+import {Avatar, Button, Col, Input, Row, Select, Table, Tag} from "antd";
 import {withRouter} from "react-router-dom";
 import {
     getContacts,
 } from "@features/Contact/redux";
-import {queries} from "@testing-library/react";
+import zaloIcon from '@images/zalo-icon.jpg';
 
 const prepareQueries = (queries = {}) => {
     let results = {}
-    if (queries.name){
+    if (queries.name) {
         results = {
             ...results,
             name: queries.name
         }
     }
 
-    if (queries.phone_number){
+    if (queries.phone_number) {
         results = {
             ...results,
             phone_number: queries.phone_number
         }
     }
 
-    if (queries.email){
+    if (queries.email) {
         results = {
             ...results,
             email: queries.email
         }
     }
 
-    if (queries.groupIds && queries.groupIds.length > 0){
+    if (queries.groupIds && queries.groupIds.length > 0) {
         results = {
             ...results,
             group_id: queries.groupIds.toString()
@@ -133,6 +133,22 @@ class CustomComponent extends Component {
         });
     }
 
+    componentDidMount() {
+        //const script = document.createElement("script");
+        //script.async = true;
+        //script.src = "https://sp.zalo.me/plugins/sdk.js";
+        //script.onload = () => this.scriptLoaded();
+
+        ////For head
+        //document.head.appendChild(script);
+
+        // For body
+        //document.body.appendChild(script);
+
+        // For component
+        //this.div.appendChild(script);
+    }
+
     render() {
         const {list} = this.props.contact
         const {loading, data} = list
@@ -140,7 +156,8 @@ class CustomComponent extends Component {
             onClickNew,
             onClickEdit,
             onShowConfirmDelete,
-            masterData
+            onShowShareUser,
+            masterData,
         } = this.props
 
         let dataPagination = data.pagination ?? {}
@@ -271,7 +288,7 @@ class CustomComponent extends Component {
                     </div>
                     <Table
                         size="small"
-                        columns={columns(onClickEdit, onShowConfirmDelete)}
+                        columns={columns(onClickEdit, onShowConfirmDelete, onShowShareUser)}
                         rowKey={record => record.id}
                         dataSource={data.list ?? []}
                         loading={loading}
@@ -284,7 +301,31 @@ class CustomComponent extends Component {
     }
 }
 
-const columns = (onShowDetail, showConfirmDelete) => {
+function createMarkup(configs) {
+    let {shareValue, shareType, oaid, customize, callback} = configs
+    let html = `<div 
+                            class="zalo-share-button" 
+                            data-href="${shareValue}" 
+                            data-oaid="${oaid}" 
+                            data-customize="${customize}" 
+                            data-share-type="${shareType}"
+                            data-callback="${callback}"
+                            ></div>`;
+    return {__html: html};
+}
+
+function ShareZaloComponent({value}) {
+    let configs = {
+        shareValue: value,
+        shareType: 1,
+        oaid: 1,
+        customize: 'true',
+        callback: 'zaloSharedCallBack'
+    }
+    return <div dangerouslySetInnerHTML={createMarkup(configs)} />;
+}
+
+const columns = (onShowDetail, showConfirmDelete, onShowShareUser) => {
     return [
         {
             title: 'ID',
@@ -292,33 +333,45 @@ const columns = (onShowDetail, showConfirmDelete) => {
             sorter: true,
         },
         {
-            title: 'Contact Name',
+            title: 'Name',
             dataIndex: 'name',
             sorter: true,
         },
         {
-            title: 'Contact Email',
+            title: 'Email',
             dataIndex: 'email',
             sorter: true,
         },
         {
-            title: 'Contact Phone Number',
+            title: 'Phone Number',
             dataIndex: 'phone_number',
             sorter: true,
         },
         {
-            title: 'Group Name',
+            title: 'Name',
             dataIndex: 'group_name',
         },
         {
-            title: 'Created At',
-            dataIndex: 'created_at',
+            title: 'Last Update',
+            dataIndex: 'updated_at',
             sorter: true,
         },
         {
-            title: 'Updated At',
-            dataIndex: 'updated_at',
-            sorter: true,
+            width: 100,
+            align: 'center',
+            title: 'Share',
+            render: (value, item) => <div className="group-button">
+                <AntButton
+                    icon={<ShareAltOutlined/>}
+                    value={item.id}
+                    onClick={onShowShareUser}
+                >
+                </AntButton>
+                <div className="share-zalo">
+                    <ShareZaloComponent value={`https://${item.phone_number}`}/>
+                    <Avatar size={48} shape={"circle"} src={zaloIcon}/>
+                </div>
+            </div>
         },
         {
             width: 100,

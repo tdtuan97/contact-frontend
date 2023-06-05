@@ -26,6 +26,7 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Contact Management</title>
+    <script src="https://sp.zalo.me/plugins/sdk.js"></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -41,4 +42,10 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script>
+    function zaloSharedCallBack(value){
+      console.log(value)
+      alert('Share Success')
+    }
+  </script>
 </html>

@@ -5,17 +5,22 @@ import {ModalConfirm} from "@layouts";
 class President extends Component {
     render() {
         const {
-                  isVisibleFormDetail,
-                  onClickNew,
-                  onClickEdit,
-                  onSubmitForm,
-                  onCloseForm,
+            isVisibleFormDetail,
+            onClickNew,
+            onClickEdit,
+            onSubmitForm,
+            onCloseForm,
 
-                  isVisibleDeleteConfirm,
-                  onShowConfirmDelete,
-                  onCloseConfirmDelete,
-                  onAcceptDelete,
-              } = this.props
+            isVisibleDeleteConfirm,
+            onShowConfirmDelete,
+            onCloseConfirmDelete,
+            onAcceptDelete,
+
+            onShowShareUser,
+            onSubmitShareUser,
+            onCloseShareUser,
+            isVisibleShareUser,
+        } = this.props
         return (
             <div className="features feature-home">
                 <h1 className="page-title">
@@ -26,6 +31,7 @@ class President extends Component {
                         onClickNew={onClickNew}
                         onClickEdit={onClickEdit}
                         onShowConfirmDelete={onShowConfirmDelete}
+                        onShowShareUser={onShowShareUser}
                     />
 
                     <Components.ContactForm
@@ -40,6 +46,12 @@ class President extends Component {
                         visible={isVisibleDeleteConfirm}
                         title="Delete group"
                         message="Are you sure ?"
+                    />
+
+                    <Components.ContactShareForm
+                        isVisible={isVisibleShareUser}
+                        onSubmitForm={onSubmitShareUser}
+                        onCloseForm={onCloseShareUser}
                     />
                 </div>
             </div>
