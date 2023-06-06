@@ -5,7 +5,7 @@ import {DeleteOutlined, EditOutlined, InfoCircleOutlined, SearchOutlined} from "
 import {Avatar, Button, Col, Input, Row, Select, Table, Tag, Switch} from "antd";
 import {withRouter} from "react-router-dom";
 import {
-    changeContactPublicStatus,
+    changeContactPublicStatus, exportContacts,
     getContacts,
 } from "@features/Contact/redux";
 import zaloIcon from '@images/zalo-icon.jpg';
@@ -137,6 +137,10 @@ class CustomComponent extends Component {
         })
     }
 
+    onClickExport = () => {
+        this.props.exportContacts(prepareQueries(this.state.queries))
+    }
+
     /**
      * On search
      */
@@ -186,6 +190,7 @@ class CustomComponent extends Component {
                   onClickEdit,
                   onShowConfirmDelete,
                   onShowShareUser,
+                  onShowImportForm,
                   masterData,
               }                          = this.props
 
@@ -218,6 +223,8 @@ class CustomComponent extends Component {
         selectGroupsData        = selectGroupsData.list ?? [];
         let selectGroupsLoading = masterData.listContactGroup.loading;
 
+        let contactExport = this.props.contact.export;
+
         return (
             <AntCard
                 className={"rule-list card-custom"}
@@ -230,6 +237,12 @@ class CustomComponent extends Component {
                             btnAddShow={true}
                             btnAddText={"New"}
                             btnAddClick={onClickNew}
+
+                            btnExportShow={true}
+                            btnExportLoading={contactExport.loading}
+                            btnExportClick={this.onClickExport}
+                            btnImportShow={true}
+                            btnImportClick={onShowImportForm}
                         />
                     </div>
                 }
@@ -523,6 +536,10 @@ function mapDispatchToProps(dispatch) {
     return {
         getContacts: (params) => {
             dispatch(getContacts(params));
+        },
+
+        exportContacts: (params) => {
+            dispatch(exportContacts(params));
         },
 
         changeContactPublicStatus: (id, status) => {

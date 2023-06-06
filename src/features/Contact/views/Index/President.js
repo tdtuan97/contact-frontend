@@ -1,26 +1,32 @@
 import React, {Component} from 'react';
 import * as Components from "../../components";
 import {ModalConfirm} from "@layouts";
+import {ContactImportForm} from "@features/Contact/components/FormImport";
 
 class President extends Component {
     render() {
         const {
-            isVisibleFormDetail,
-            onClickNew,
-            onClickEdit,
-            onSubmitForm,
-            onCloseForm,
+                  isVisibleFormDetail,
+                  onClickNew,
+                  onClickEdit,
+                  onSubmitForm,
+                  onCloseForm,
 
-            isVisibleDeleteConfirm,
-            onShowConfirmDelete,
-            onCloseConfirmDelete,
-            onAcceptDelete,
+                  isVisibleDeleteConfirm,
+                  onShowConfirmDelete,
+                  onCloseConfirmDelete,
+                  onAcceptDelete,
 
-            onShowShareUser,
-            onSubmitShareUser,
-            onCloseShareUser,
-            isVisibleShareUser,
-        } = this.props
+                  onShowShareUser,
+                  onSubmitShareUser,
+                  onCloseShareUser,
+                  isVisibleShareUser,
+
+                  isVisibleImport,
+                  onShowImportForm,
+                  onCloseImportForm,
+                  onSubmitImport,
+              } = this.props
         return (
             <div className="features feature-home">
                 <h1 className="page-title">
@@ -32,6 +38,7 @@ class President extends Component {
                         onClickEdit={onClickEdit}
                         onShowConfirmDelete={onShowConfirmDelete}
                         onShowShareUser={onShowShareUser}
+                        onShowImportForm={onShowImportForm}
                     />
 
                     <Components.ContactForm
@@ -52,6 +59,12 @@ class President extends Component {
                         isVisible={isVisibleShareUser}
                         onSubmitForm={onSubmitShareUser}
                         onCloseForm={onCloseShareUser}
+                    />
+
+                    <Components.ContactImportForm
+                        isVisible={isVisibleImport}
+                        onSubmitForm={onSubmitImport}
+                        onCloseForm={onCloseImportForm}
                     />
                 </div>
             </div>

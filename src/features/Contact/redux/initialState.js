@@ -34,6 +34,21 @@ const initialState = {
         loading: false,
         id: null,
     },
+
+    export: {
+        data: [],
+        loading: false,
+    },
+
+    import: {
+        data: {},
+        errors: {},
+        loading: false,
+    },
+
+    upload: {
+        filename: null,
+    },
 };
 
 export default initialState;

@@ -44,7 +44,7 @@ function generateUrl(endPoint) {
 /*
     Apply token
  */
-function applyToken(config) {
+export function applyToken(config) {
     const state = loadStateFromLocal();
     config      = {};
     if (state.meta.token !== null) {

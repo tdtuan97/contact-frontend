@@ -1,6 +1,7 @@
-import {apiGet, apiPost, apiPut} from "@common/crud";
+import {apiGet, apiPost, apiPostForm, apiPut} from "@common/crud";
 import * as CONSTANTS from "./constants";
 import {apiDelete} from "@common/crud/actions";
+import helpers from "@ultis/helpers";
 
 /**
  * Paginate
@@ -30,6 +31,45 @@ function getContactsAction(response) {
 function getContactsLoadingAction() {
     return {
         type   : CONSTANTS.GET_CONTACT_LIST_LOADING,
+        payload: null
+    };
+}
+
+/**
+ * Paginate
+ * @param params
+ * @returns
+ */
+export function exportContacts(params = {}) {
+    let queries = {
+        ...params,
+        page : params.page ?? 1,
+        limit: params.limit ?? 15,
+        all  : '1'
+    }
+
+    return dispatch => {
+        dispatch(exportContactsLoadingAction())
+        dispatch(apiGet(`export/contacts`, queries, {}, exportContactsAction))
+    };
+}
+
+function exportContactsAction(response) {
+    let data = response.data ?? {}
+    let filename = data.filename ?? null
+    let url = filename ? (process.env.REACT_APP_HOST + filename) : null;
+    if (url){
+        helpers.download(url, url.split('/').reverse()[0])
+    }
+    return {
+        type   : CONSTANTS.EXPORT_CONTACT_LIST,
+        payload: response
+    };
+}
+
+function exportContactsLoadingAction() {
+    return {
+        type   : CONSTANTS.EXPORT_CONTACT_LIST_LOADING,
         payload: null
     };
 }
@@ -180,5 +220,48 @@ export function clearFormContact() {
     return {
         type   : CONSTANTS.CLEAR_FORM_CONTACT,
         payload: null
+    };
+}
+
+/**
+ * Create
+ * @param params
+ * @returns
+ */
+export function importContacts(params) {
+    return dispatch => {
+        dispatch(importContactsLoadingAction())
+        dispatch(apiPost(`import/contacts`, params, {}, importContactsAction))
+    };
+}
+
+function importContactsAction(response) {
+    return {
+        type   : CONSTANTS.IMPORT_CONTACT_LIST,
+        payload: response
+    };
+}
+
+function importContactsLoadingAction() {
+    return {
+        type   : CONSTANTS.IMPORT_CONTACT_LIST_LOADING,
+        payload: null
+    };
+}
+
+/**
+ * Create
+ * @returns
+ * @param filename
+ */
+export function setUploadFile(filename) {
+    return dispatch => {
+        dispatch(setUploadFileAction(filename))
+    };
+}
+function setUploadFileAction(filename) {
+    return {
+        type   : CONSTANTS.SET_UPLOAD_FILE,
+        payload: filename
     };
 }

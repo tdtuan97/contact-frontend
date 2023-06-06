@@ -41,6 +41,13 @@ class CustomComponent extends Component {
                   btnAddText,
                   btnAddClick,
 
+                  btnExportShow,
+                  btnExportLoading,
+                  btnExportClick,
+
+                  btnImportShow,
+                  btnImportClick,
+
                   selectTimeOptions,
                   selectTimeDefault,
                   handleChangeTime,
@@ -82,6 +89,32 @@ class CustomComponent extends Component {
                         <div className="toolbox-control datetime-control">
                             Last update: {updateAt}
                         </div> : null
+                }
+
+                {
+                    btnExportShow ?
+                    <span className="toolbox-control setting-control">
+                            <AntButton
+                                loading={btnExportLoading}
+                                icon={<PlusOutlined/>}
+                                onClick={btnExportClick}
+                            >
+                                Export
+                            </AntButton>
+                        </span> : null
+                }
+
+                {
+                    btnImportShow ?
+                    <span className="toolbox-control setting-control">
+                            <AntButton
+                                className="btn-primary-ghost"
+                                icon={<PlusOutlined/>}
+                                onClick={btnImportClick}
+                            >
+                                Import
+                            </AntButton>
+                        </span> : null
                 }
 
                 {

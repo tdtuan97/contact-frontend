@@ -184,6 +184,36 @@ export function reducer(state = initialState, action) {
                 },
             }
 
+        /**
+         * Export
+         */
+        case CONSTANTS.EXPORT_CONTACT_LIST:
+            return {
+                ...state,
+                export: {
+                    ...state.export,
+                    loading: false,
+                    data   : payload ? payload.data : {},
+                },
+            }
+        case CONSTANTS.EXPORT_CONTACT_LIST_LOADING:
+            return {
+                ...state,
+                export: {
+                    ...state.export,
+                    loading: true,
+                },
+            }
+
+        case CONSTANTS.SET_UPLOAD_FILE:
+            return {
+                ...state,
+                upload: {
+                    ...state.upload,
+                    filename: payload,
+                },
+            }
+
         default:
             return state;
     }

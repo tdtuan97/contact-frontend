@@ -9,7 +9,7 @@ import {
     getContacts,
     updateContact,
     deleteContact,
-    createContact
+    createContact, importContacts
 } from "@features/Contact/redux/actions";
 import {getAllContactGroups} from "@features/MasterData/redux";
 
@@ -20,6 +20,7 @@ class Container extends Component {
             isVisibleFormDetail: false,
             isVisibleDeleteConfirm: false,
             isVisibleShareUser: false,
+            isVisibleImport: false,
             idSelected: null,
         }
     }
@@ -104,6 +105,14 @@ class Container extends Component {
         })
     }
 
+    /**
+     * On accept delete rule
+     */
+    onAcceptDelete = () => {
+        this.props.deleteContact(this.state.idSelected);
+        this.onCloseConfirmDelete();
+    }
+
     onShowShareUser = (e) => {
         this.setState({
             ...this.state,
@@ -126,11 +135,33 @@ class Container extends Component {
     }
 
     /**
+     * On show confirm delete
+     */
+    onShowImportForm = () => {
+        this.setState({
+            ...this.state,
+            isVisibleImport: true,
+        })
+    }
+
+    /**
+     * On close confirm delete
+     */
+    onCloseImportForm = () => {
+        this.setState({
+            ...this.state,
+            isVisibleImport: false,
+        })
+    }
+
+    /**
      * On accept delete rule
      */
-    onAcceptDelete = () => {
-        this.props.deleteContact(this.state.idSelected);
-        this.onCloseConfirmDelete();
+    onSubmitImport = (data) => {
+        let file = data.file ?? []
+        this.props.importContacts({
+            filename: this.props.contact.upload.filename,
+        });
     }
 
     componentDidMount() {
@@ -155,7 +186,8 @@ class Container extends Component {
         const {
             isVisibleFormDetail,
             isVisibleDeleteConfirm,
-            isVisibleShareUser
+            isVisibleShareUser,
+            isVisibleImport,
         } = this.state
         return (
             <President
@@ -175,6 +207,11 @@ class Container extends Component {
                 onCloseShareUser={this.onCloseShareUser}
                 onSubmitShareUser={this.onSubmitShareUser}
                 isVisibleShareUser={isVisibleShareUser}
+
+                isVisibleImport={isVisibleImport}
+                onShowImportForm={this.onShowImportForm}
+                onCloseImportForm={this.onCloseImportForm}
+                onSubmitImport={this.onSubmitImport}
             />
         )
     }
@@ -205,6 +242,9 @@ function mapDispatchToProps(dispatch) {
         },
         getAllContactGroups: () => {
             dispatch(getAllContactGroups());
+        },
+        importContacts: (params) => {
+            dispatch(importContacts(params));
         },
     };
 }
