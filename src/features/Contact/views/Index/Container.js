@@ -52,11 +52,14 @@ class Container extends Component {
     onSubmitForm = (data) => {
         let id = data.id ?? null;
 
+        console.log(data)
+
         let params = {
             name: data.name ?? "",
             phone_number: data.phone_number ?? "",
             email: data.email ?? "",
             group_id: data.group_id ?? null,
+            is_public: data.is_public ?? 0,
         }
 
         // Create or Update
@@ -131,7 +134,6 @@ class Container extends Component {
     }
 
     componentDidMount() {
-        this.props.getContacts()
         this.props.getAllContactGroups();
     }
 

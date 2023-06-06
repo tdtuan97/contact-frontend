@@ -28,6 +28,12 @@ const initialState = {
         loading: false,
         isDeleted: false,
     },
+
+    updatePublicStatus: {
+        errors: {},
+        loading: false,
+        id: null,
+    },
 };
 
 export default initialState;

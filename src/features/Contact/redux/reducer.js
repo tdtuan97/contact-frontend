@@ -158,6 +158,32 @@ export function reducer(state = initialState, action) {
                 },
             }
 
+        /**
+         * Update public status
+         */
+        case CONSTANTS.CHANGE_CONTACT_PUBLIC_STATUS:
+            if (payload.code === CODE_SUCCESS) {
+                pushMessageSuccess("Change status success.");
+            }
+            return {
+                ...state,
+                updatePublicStatus: {
+                    ...state.updatePublicStatus,
+                    loading: false,
+                    errors : payload.errors ?? {},
+                    id     : null
+                },
+            }
+        case CONSTANTS.CHANGE_CONTACT_PUBLIC_STATUS_LOADING:
+            return {
+                ...state,
+                updatePublicStatus: {
+                    ...state.updatePublicStatus,
+                    loading: true,
+                    id     : payload.id
+                },
+            }
+
         default:
             return state;
     }

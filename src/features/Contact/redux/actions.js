@@ -143,6 +143,36 @@ function deleteContactLoadingAction() {
 }
 
 /**
+ * Delete
+ * @param id
+ * @param status
+ * @returns
+ */
+export function changeContactPublicStatus(id, status) {
+    let url = status ? "public" : "revoke"
+    return dispatch => {
+        dispatch(changeContactPublicStatusLoadingAction(id))
+        dispatch(apiPost(`contacts/${id}/${url}`, {}, {}, changeContactPublicStatusAction))
+    };
+}
+
+function changeContactPublicStatusAction(response) {
+    return {
+        type   : CONSTANTS.CHANGE_CONTACT_PUBLIC_STATUS,
+        payload: response
+    };
+}
+
+function changeContactPublicStatusLoadingAction(id) {
+    return {
+        type   : CONSTANTS.CHANGE_CONTACT_PUBLIC_STATUS_LOADING,
+        payload: {
+            id: id
+        }
+    };
+}
+
+/**
  * Clear form rule
  * @returns {{payload: null, type: string}}
  */

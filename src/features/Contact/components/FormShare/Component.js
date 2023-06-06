@@ -14,6 +14,7 @@ const initValues = {
     email       : "",
     phone_number: "",
     group_id    : null,
+    is_public   : null,
 }
 
 class CustomComponent extends Component {
@@ -37,7 +38,8 @@ class CustomComponent extends Component {
                     name        : data.name ?? "",
                     email       : data.email ?? "",
                     phone_number: data.phone_number ?? "",
-                    group_id    : data.group_id ?? null,
+                    group_id    : data.group_name ?? null,
+                    is_public   : data.is_public === 1 ? 'Public' : 'Private',
                 })
             }
         }
@@ -144,17 +146,22 @@ class CustomComponent extends Component {
                     >
                         <AntInput readOnly={true} placeholder="Enter contact email"/>
                     </AntFormItem>
+                    <AntFormItem
+                        label="Is Public"
+                        name="is_public"
+                        errors={errors.is_public}
+                    >
+                        <AntInput readOnly={true}/>
+                    </AntFormItem>
+                    <AntFormItem
+                        label="Group"
+                        name="group_id"
+                        errors={errors.group_id}
+                    >
+                        <AntInput readOnly={true}/>
+                    </AntFormItem>
                     <Divider style={{marginBlock: 24}}/>
                     <div className="text-center group-button">
-                        {
-                            <AntButton
-                                className="btn-primary"
-                                htmlType="submit"
-                                loading={updateLoading}
-                            >
-                                Update
-                            </AntButton>
-                        }
                         <AntButton
                             onClick={this.onCloseForm}
                         >

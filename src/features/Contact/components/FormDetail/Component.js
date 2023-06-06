@@ -14,7 +14,19 @@ const initValues = {
     email       : "",
     phone_number: "",
     group_id    : null,
+    is_public   : 0,
 }
+
+const PublicStatus = [
+    {
+        value: 1,
+        text : "Public",
+    },
+    {
+        value: 0,
+        text : "Private",
+    },
+]
 
 class CustomComponent extends Component {
     formRef = React.createRef();
@@ -38,6 +50,7 @@ class CustomComponent extends Component {
                     email       : data.email ?? "",
                     phone_number: data.phone_number ?? "",
                     group_id    : data.group_id ?? null,
+                    is_public   : data.is_public ?? 0,
                 })
             }
         }
@@ -93,8 +106,8 @@ class CustomComponent extends Component {
 
         const loadingDetail = detail.loading;
 
-        let selectGroupsData = masterData.listContactGroup.data ?? {};
-        selectGroupsData = selectGroupsData.list ?? [];
+        let selectGroupsData    = masterData.listContactGroup.data ?? {};
+        selectGroupsData        = selectGroupsData.list ?? [];
         let selectGroupsLoading = masterData.listContactGroup.loading;
         return (
             <Drawer
@@ -145,6 +158,25 @@ class CustomComponent extends Component {
                         <AntInput placeholder="Enter contact email"/>
                     </AntFormItem>
                     <AntFormItem
+                        label="Is Public"
+                        name="is_public"
+                        errors={errors.is_public}
+                    >
+                        <Select
+                            allowClear={true}
+                            placeholder={"Select group"}
+                        >
+                            {
+                                PublicStatus ?
+                                PublicStatus.map((item, index) => {
+                                    return (
+                                        <Select.Option value={item.value} key={index}>{item.text}</Select.Option>
+                                    )
+                                }) : null
+                            }
+                        </Select>
+                    </AntFormItem>
+                    <AntFormItem
                         label="Group"
                         name="group_id"
                         errors={errors.group_id}
@@ -156,11 +188,11 @@ class CustomComponent extends Component {
                         >
                             {
                                 selectGroupsData ?
-                                    selectGroupsData.map((item, index) => {
-                                        return (
-                                            <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
-                                        )
-                                    }) : null
+                                selectGroupsData.map((item, index) => {
+                                    return (
+                                        <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
+                                    )
+                                }) : null
                             }
                         </Select>
                     </AntFormItem>
@@ -168,20 +200,20 @@ class CustomComponent extends Component {
                     <div className="text-center group-button">
                         {
                             dataDetail.id ?
-                                <AntButton
-                                    className="btn-primary"
-                                    htmlType="submit"
-                                    loading={updateLoading}
-                                >
-                                    Update
-                                </AntButton> :
-                                <AntButton
-                                    className="btn-success"
-                                    htmlType="submit"
-                                    loading={createLoading}
-                                >
-                                    Save
-                                </AntButton>
+                            <AntButton
+                                className="btn-primary"
+                                htmlType="submit"
+                                loading={updateLoading}
+                            >
+                                Update
+                            </AntButton> :
+                            <AntButton
+                                className="btn-success"
+                                htmlType="submit"
+                                loading={createLoading}
+                            >
+                                Save
+                            </AntButton>
                         }
                         <AntButton
                             onClick={this.onCloseForm}

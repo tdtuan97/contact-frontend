@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {AntButton, AntCard, ToolboxControl} from "@layouts";
-import {DeleteOutlined, EditOutlined, SearchOutlined, ShareAltOutlined} from "@ant-design/icons";
-import {Avatar, Button, Col, Input, Row, Select, Table, Tag} from "antd";
+import {DeleteOutlined, EditOutlined, InfoCircleOutlined, SearchOutlined} from "@ant-design/icons";
+import {Avatar, Button, Col, Input, Row, Select, Table, Tag, Switch} from "antd";
 import {withRouter} from "react-router-dom";
 import {
+    changeContactPublicStatus,
     getContacts,
 } from "@features/Contact/redux";
 import zaloIcon from '@images/zalo-icon.jpg';
@@ -32,6 +33,20 @@ const prepareQueries = (queries = {}) => {
         }
     }
 
+    if (queries.type) {
+        results = {
+            ...results,
+            type: queries.type
+        }
+    }
+
+    if (queries.is_public) {
+        results = {
+            ...results,
+            is_public: queries.is_public
+        }
+    }
+
     if (queries.groupIds && queries.groupIds.length > 0) {
         results = {
             ...results,
@@ -47,11 +62,13 @@ class CustomComponent extends Component {
         super(props);
         this.state = {
             selectedId: null,
-            queries: {
-                name: "",
+            queries   : {
+                name        : "",
                 phone_number: "",
-                email: "",
-                groupIds: [],
+                email       : "",
+                groupIds    : [],
+                type        : "me",
+                is_public   : null,
             }
         }
     }
@@ -100,6 +117,26 @@ class CustomComponent extends Component {
         })
     }
 
+    onChangePublicStatus = (value) => {
+        this.setState({
+            ...this.state,
+            queries: {
+                ...this.state.queries,
+                is_public: value
+            }
+        })
+    }
+
+    onChangeContactType = (value) => {
+        this.setState({
+            ...this.state,
+            queries: {
+                ...this.state.queries,
+                type: value
+            }
+        })
+    }
+
     /**
      * On search
      */
@@ -120,62 +157,65 @@ class CustomComponent extends Component {
 
         // Order by
         let orderBy = sorter.order ?? "ascend";
-        orderBy = orderBy === "ascend" ? 'ASC' : 'DESC';
+        orderBy     = orderBy === "ascend" ? 'ASC' : 'DESC';
 
         // Paginate
         let page = pagination !== undefined ? pagination.current : 1;
         this.props.getContacts({
-            sort_by: sortBy,
+            sort_by : sortBy,
             order_by: orderBy,
-            page: page,
+            page    : page,
             ...filters,
             ...prepareQueries(this.state.queries),
         });
     }
 
+    onChangeSwitch = (value, id) => {
+        this.props.changeContactPublicStatus(id, value)
+    }
+
     componentDidMount() {
-        //const script = document.createElement("script");
-        //script.async = true;
-        //script.src = "https://sp.zalo.me/plugins/sdk.js";
-        //script.onload = () => this.scriptLoaded();
-
-        ////For head
-        //document.head.appendChild(script);
-
-        // For body
-        //document.body.appendChild(script);
-
-        // For component
-        //this.div.appendChild(script);
+        this.props.getContacts(prepareQueries(this.state.queries))
     }
 
     render() {
-        const {list} = this.props.contact
-        const {loading, data} = list
+        const {list, updatePublicStatus} = this.props.contact
+        let {loading, data}              = list
         const {
-            onClickNew,
-            onClickEdit,
-            onShowConfirmDelete,
-            onShowShareUser,
-            masterData,
-        } = this.props
+                  onClickNew,
+                  onClickEdit,
+                  onShowConfirmDelete,
+                  onShowShareUser,
+                  masterData,
+              }                          = this.props
 
         let dataPagination = data.pagination ?? {}
-        let pagination = {
-            current: dataPagination.page ?? 1,
-            pageSize: dataPagination.size ?? 15,
-            total: dataPagination.total ?? 0,
+        let pagination     = {
+            current        : dataPagination.page ?? 1,
+            pageSize       : dataPagination.size ?? 15,
+            total          : dataPagination.total ?? 0,
             showSizeChanger: false,
-            size: "default",
+            size           : "default",
         }
+        let dataList       = data.list ?? []
 
-        let searchText = this.state.queries.name;
+        dataList = dataList.map((item) => {
+            let publicLoading = parseInt(updatePublicStatus.id) === parseInt(item.id) && updatePublicStatus.loading
+            return {
+                ...item,
+                public_loading: publicLoading
+            }
+        })
+
+        let searchText        = this.state.queries.name;
         let searchPhoneNumber = this.state.queries.phone_number;
-        let searchEmail = this.state.queries.email;
-        let selectedGroupIds = this.state.queries.groupIds;
+        let searchEmail       = this.state.queries.email;
+        let selectedGroupIds  = this.state.queries.groupIds;
+        let selectedType      = this.state.queries.type;
+        let selectedIsPublic  = this.state.queries.is_public;
 
-        let selectGroupsData = masterData.listContactGroup.data ?? {};
-        selectGroupsData = selectGroupsData.list ?? [];
+        let selectGroupsData    = masterData.listContactGroup.data ?? {};
+        selectGroupsData        = selectGroupsData.list ?? [];
         let selectGroupsLoading = masterData.listContactGroup.loading;
 
         return (
@@ -199,7 +239,7 @@ class CustomComponent extends Component {
                         <Row gutter={{xs: 8, sm: 12, md: 12}}>
                             <Col xs={24} xl={12}>
                                 <div className="search-input input-keyword">
-                                    <div className="input-label">Keyword:</div>
+                                    <div className="input-label">Name:</div>
                                     <div className="input-value">
                                         <Input
                                             placeholder="Search group by name"
@@ -226,13 +266,13 @@ class CustomComponent extends Component {
                                         >
                                             {
                                                 selectGroupsData ?
-                                                    selectGroupsData.map((item, index) => {
-                                                        return (
-                                                            <Select.Option value={item.id}
-                                                                           key={index}>{item.name}
-                                                            </Select.Option>
-                                                        )
-                                                    }) : null
+                                                selectGroupsData.map((item, index) => {
+                                                    return (
+                                                        <Select.Option value={item.id}
+                                                                       key={index}>{item.name}
+                                                        </Select.Option>
+                                                    )
+                                                }) : null
                                             }
                                         </Select>
                                     </div>
@@ -266,11 +306,64 @@ class CustomComponent extends Component {
                             </Col>
                         </Row>
                         <Row gutter={{xs: 8, sm: 12, md: 12}}>
+                            <Col xs={24} xl={12}>
+                                <div className="search-input input-keyword">
+                                    <div className="input-label">Type:</div>
+                                    <div className="input-value">
+                                        <Select
+                                            allowClear
+                                            placeholder="Select contact type"
+                                            value={selectedType}
+                                            style={{width: "100%"}}
+                                            tagRender={tagRender}
+                                            onChange={this.onChangeContactType}
+                                        >
+                                            {
+                                                ContactType ?
+                                                ContactType.map((item, index) => {
+                                                    return (
+                                                        <Select.Option value={item.value}
+                                                                       key={index}>{item.text}
+                                                        </Select.Option>
+                                                    )
+                                                }) : null
+                                            }
+                                        </Select>
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col xs={24} xl={12}>
+                                <div className="search-input input-status">
+                                    <div className="input-label">Public Status:</div>
+                                    <div className="input-value">
+                                        <Select
+                                            allowClear
+                                            placeholder="Select public status"
+                                            value={selectedIsPublic}
+                                            style={{width: "100%"}}
+                                            onChange={this.onChangePublicStatus}
+                                        >
+                                            {
+                                                PublicStatus ?
+                                                PublicStatus.map((item, index) => {
+                                                    return (
+                                                        <Select.Option value={item.value}
+                                                                       key={index}>{item.text}
+                                                        </Select.Option>
+                                                    )
+                                                }) : null
+                                            }
+                                        </Select>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row gutter={{xs: 8, sm: 12, md: 12}}>
                             <Col xs={{
-                                span: 12,
+                                span  : 12,
                                 offset: 6,
                             }} xl={{
-                                span: 8,
+                                span  : 8,
                                 offset: 8,
                             }}>
                                 <div className="search-button">
@@ -288,9 +381,9 @@ class CustomComponent extends Component {
                     </div>
                     <Table
                         size="small"
-                        columns={columns(onClickEdit, onShowConfirmDelete, onShowShareUser)}
+                        columns={columns(onClickEdit, onShowConfirmDelete, this.onChangeSwitch, onShowShareUser)}
                         rowKey={record => record.id}
-                        dataSource={data.list ?? []}
+                        dataSource={dataList}
                         loading={loading}
                         pagination={pagination}
                         onChange={(pagination, filters, sorter) => this.onChangeTable(pagination, filters, sorter)}
@@ -303,7 +396,7 @@ class CustomComponent extends Component {
 
 function createMarkup(configs) {
     let {shareValue, shareType, oaid, customize, callback} = configs
-    let html = `<div 
+    let html                                               = `<div 
                             class="zalo-share-button" 
                             data-href="${shareValue}" 
                             data-oaid="${oaid}" 
@@ -317,80 +410,102 @@ function createMarkup(configs) {
 function ShareZaloComponent({value}) {
     let configs = {
         shareValue: value,
-        shareType: 1,
-        oaid: 1,
-        customize: 'true',
-        callback: 'zaloSharedCallBack'
+        shareType : 1,
+        oaid      : 1,
+        customize : 'true',
+        callback  : 'zaloSharedCallBack'
     }
-    return <div dangerouslySetInnerHTML={createMarkup(configs)} />;
+    return <div dangerouslySetInnerHTML={createMarkup(configs)}/>;
 }
 
-const columns = (onShowDetail, showConfirmDelete, onShowShareUser) => {
+const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUser) => {
     return [
         {
-            title: 'ID',
+            width    : 50,
+            title    : 'ID',
             dataIndex: 'id',
-            sorter: true,
+            sorter   : true,
         },
         {
-            title: 'Name',
+            title    : 'Name',
             dataIndex: 'name',
-            sorter: true,
+            sorter   : true,
         },
         {
-            title: 'Email',
+            title    : 'Email',
             dataIndex: 'email',
-            sorter: true,
+            sorter   : true,
         },
         {
-            title: 'Phone Number',
+            title    : 'Phone Number',
             dataIndex: 'phone_number',
-            sorter: true,
+            sorter   : true,
         },
         {
-            title: 'Name',
+            title    : 'Name',
             dataIndex: 'group_name',
         },
         {
-            title: 'Last Update',
-            dataIndex: 'updated_at',
-            sorter: true,
+            title    : 'Author',
+            dataIndex: 'created_user_name',
         },
         {
-            width: 100,
-            align: 'center',
-            title: 'Share',
+            width    : 150,
+            title    : 'Last Update',
+            dataIndex: 'updated_at',
+            sorter   : true,
+        },
+        {
+            width : 100,
+            align : 'center',
+            title : 'Public Status',
             render: (value, item) => <div className="group-button">
-                <AntButton
-                    icon={<ShareAltOutlined/>}
-                    value={item.id}
-                    onClick={onShowShareUser}
-                >
-                </AntButton>
+                <Switch
+                    disabled={!item.allow_edit}
+                    loading={item.public_loading}
+                    defaultChecked={parseInt(item.is_public) === 1}
+                    checkedChildren="Public"
+                    unCheckedChildren="Private"
+                    onChange={(value) => {
+                        onChangeSwitch(value, item.id)
+                    }}
+                />
+            </div>
+        },
+        {
+            width : 100,
+            align : 'center',
+            title : 'Action',
+            render: (value, item) => <div className="group-button">
                 <div className="share-zalo">
                     <ShareZaloComponent value={`https://${item.phone_number}`}/>
                     <Avatar size={48} shape={"circle"} src={zaloIcon}/>
                 </div>
-            </div>
-        },
-        {
-            width: 100,
-            align: 'center',
-            title: 'Action',
-            render: (value, item) => <div className="group-button">
-                <AntButton
-                    icon={<EditOutlined/>}
-                    type="primary" ghost
-                    value={item.id}
-                    onClick={onShowDetail}
-                >
-                </AntButton>
-                <AntButton
-                    icon={<DeleteOutlined/>}
-                    type="danger" ghost
-                    value={item.id}
-                    onClick={showConfirmDelete}
-                />
+                {
+                    item.allow_edit ?
+                    <>
+                        <AntButton
+                            icon={<EditOutlined/>}
+                            type="primary" ghost
+                            value={item.id}
+                            onClick={onShowDetail}
+                        >
+                        </AntButton>
+                        <AntButton
+                            icon={<DeleteOutlined/>}
+                            type="danger" ghost
+                            value={item.id}
+                            onClick={showConfirmDelete}
+                        />
+                    </>
+                                    : <AntButton
+                        icon={<InfoCircleOutlined/>}
+                        value={item.id}
+                        onClick={onShowShareUser}
+                    >
+                    </AntButton>
+                }
+
             </div>
         },
     ]
@@ -398,8 +513,8 @@ const columns = (onShowDetail, showConfirmDelete, onShowShareUser) => {
 
 function mapStateToProps(state) {
     return {
-        common: state.common,
-        contact: state.contact,
+        common    : state.common,
+        contact   : state.contact,
         masterData: state.masterData,
     }
 }
@@ -408,6 +523,10 @@ function mapDispatchToProps(dispatch) {
     return {
         getContacts: (params) => {
             dispatch(getContacts(params));
+        },
+
+        changeContactPublicStatus: (id, status) => {
+            dispatch(changeContactPublicStatus(id, status));
         },
     };
 }
@@ -453,3 +572,29 @@ const tagRender = (props) => {
         </Tag>
     );
 };
+
+const PublicStatus = [
+    {
+        value: "1",
+        text : "Public",
+    },
+    {
+        value: "0",
+        text : "Private",
+    },
+]
+
+const ContactType = [
+    {
+        value: "all",
+        text : "All",
+    },
+    {
+        value: "me",
+        text : "Created by me",
+    },
+    {
+        value: "shared",
+        text : "Shared",
+    },
+]
