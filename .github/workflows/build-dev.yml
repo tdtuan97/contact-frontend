@@ -1,0 +1,25 @@
+name: Build Production Image
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  CI_REGISTRY_IMAGE: ghcr.io/tdtuan97/contact-frontend:latest
+  CI_REGISTRY_TAG: contact-frontend:latest
+
+jobs:
+  build:
+    runs-on: [ self-hosted, run-label ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login Github package
+        run: echo ${{ secrets.CI_TOKEN }} | docker login ghcr.io -u USERNAME --password-stdin
+      - run: docker pull $CI_REGISTRY_IMAGE || true
+      - name: Build Docker image
+        run: docker build --cache-from $CI_REGISTRY_IMAGE --tag $CI_REGISTRY_TAG .
+      - name: Tag image
+        run: docker tag $CI_REGISTRY_TAG $CI_REGISTRY_IMAGE
+      - name: Publish image
+        run: docker push $CI_REGISTRY_IMAGE
