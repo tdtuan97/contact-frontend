@@ -1,0 +1,17 @@
+.feature-shared-card{
+  padding-top: 48px;
+  .shared-card {
+    background-color: #f3f6fa4f;
+    margin: 0 auto;
+    width: 400px;
+    box-shadow: 0 0 2px $colorPrimary;
+
+    .ant-card-head-title{
+      text-align: center;
+    }
+    .ant-descriptions-bordered .ant-descriptions-view{
+      border: none;
+    }
+
+  }
+}

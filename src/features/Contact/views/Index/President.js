@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import * as Components from "../../components";
 import {ModalConfirm} from "@layouts";
-import {ContactImportForm} from "@features/Contact/components/FormImport";
 
 class President extends Component {
     render() {

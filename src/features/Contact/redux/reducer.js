@@ -238,6 +238,28 @@ export function reducer(state = initialState, action) {
                 },
             }
 
+        /**
+         * Get shared
+         */
+        case CONSTANTS.GET_CONTACT_SHARED:
+            return {
+                ...state,
+                shared: {
+                    ...state.shared,
+                    loading: false,
+                    data   : payload.data ?? {},
+                    errors : payload.errors ?? {},
+                },
+            }
+        case CONSTANTS.GET_CONTACT_SHARED_LOADING:
+            return {
+                ...state,
+                shared: {
+                    ...state.shared,
+                    loading: true,
+                },
+            }
+
         default:
             return state;
     }

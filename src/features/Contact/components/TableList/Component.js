@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {AntButton, AntCard, ToolboxControl} from "@layouts";
-import {DeleteOutlined, EditOutlined, InfoCircleOutlined, SearchOutlined} from "@ant-design/icons";
-import {Avatar, Button, Col, Input, Row, Select, Table, Tag, Switch} from "antd";
-import {withRouter} from "react-router-dom";
+import {
+    DeleteOutlined,
+    DownloadOutlined,
+    EditOutlined,
+    InfoCircleOutlined,
+    SearchOutlined,
+    ShareAltOutlined
+} from "@ant-design/icons";
+import {Avatar, Button, Col, Input, Row, Select, Table, Tag, Switch, Tooltip} from "antd";
+import {Link, withRouter} from "react-router-dom";
 import {
     changeContactPublicStatus, exportContacts,
     getContacts,
@@ -425,7 +432,7 @@ function ShareZaloComponent({value}) {
     let configs = {
         shareValue: value,
         shareType : 1,
-        oaid      : 1,
+        oaid      : process.env.REACT_APP_ZALO_OAID,
         customize : 'true',
         callback  : 'zaloSharedCallBack'
     }
@@ -456,7 +463,7 @@ const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUse
             sorter   : true,
         },
         {
-            title    : 'Name',
+            title    : 'Group Name',
             dataIndex: 'group_name',
         },
         {
@@ -491,33 +498,56 @@ const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUse
             align : 'center',
             title : 'Action',
             render: (value, item) => <div className="group-button">
-                <div className="share-zalo">
-                    <ShareZaloComponent value={`https://${item.phone_number}`}/>
-                    <Avatar size={48} shape={"circle"} src={zaloIcon}/>
+                <Tooltip title={'Zalo Share'}>
+                    <div className="share-zalo">
+                        <ShareZaloComponent value={`${process.env.REACT_APP_BASE_URL}/contact-shared/${item.id}`}/>
+                        <Avatar size={48} shape={"circle"} src={zaloIcon}/>
+                    </div>
+                </Tooltip>
+                <div className="share-link">
+                    <Tooltip title={'Share Link'}>
+                        <AntButton
+                            className="btn-success-ghost"
+                            icon={<ShareAltOutlined />}
+                            href={`contact-shared/${item.id}`}
+                            target="_blank"
+
+                        >
+                        </AntButton>
+                    </Tooltip>
                 </div>
                 {
                     item.allow_edit ?
                     <>
-                        <AntButton
-                            icon={<EditOutlined/>}
-                            type="primary" ghost
-                            value={item.id}
-                            onClick={onShowDetail}
-                        >
-                        </AntButton>
-                        <AntButton
-                            icon={<DeleteOutlined/>}
-                            type="danger" ghost
-                            value={item.id}
-                            onClick={showConfirmDelete}
-                        />
+                        <Tooltip title={'Edit'}>
+                            <AntButton
+                                icon={<EditOutlined/>}
+                                type="primary" ghost
+                                value={item.id}
+                                onClick={onShowDetail}
+                            >
+                            </AntButton>
+                        </Tooltip>
+                        <Tooltip title={'Delete'}>
+                            <AntButton
+                                icon={<DeleteOutlined/>}
+                                type="danger" ghost
+                                value={item.id}
+                                onClick={showConfirmDelete}
+                            />
+                        </Tooltip>
                     </>
-                                    : <AntButton
-                        icon={<InfoCircleOutlined/>}
-                        value={item.id}
-                        onClick={onShowShareUser}
-                    >
-                    </AntButton>
+                                    :
+                    <>
+                        <Tooltip title={'View'}>
+                            <AntButton
+                                icon={<InfoCircleOutlined/>}
+                                value={item.id}
+                                onClick={onShowShareUser}
+                            >
+                            </AntButton>
+                        </Tooltip>
+                    </>
                 }
 
             </div>

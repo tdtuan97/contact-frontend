@@ -5,7 +5,7 @@ import {
     AntButton,
     AntFormItem,
 } from "@layouts";
-import {UploadOutlined} from "@ant-design/icons";
+import {DownloadOutlined, EditOutlined, UploadOutlined} from "@ant-design/icons";
 import {applyToken, generateUrl} from "@common/crud/actions";
 import {setUploadFile} from "@features/Contact/redux";
 import {TableImportResult} from "@features/Contact/components";
@@ -102,9 +102,14 @@ class CustomComponent extends Component {
                     <AntFormItem
                         label="Import Template"
                     >
-                        <Link to={{
-                            pathname: importTemplateLink
-                        }} target="_blank" download>Download Now</Link>
+                        <AntButton
+                            className="btn-success-ghost"
+                            shape="round"
+                            icon={<DownloadOutlined />}
+                            href={importTemplateLink}
+                        >
+                            Download
+                        </AntButton>
                     </AntFormItem>
                     <AntFormItem
                         name="file"

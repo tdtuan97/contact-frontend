@@ -265,3 +265,30 @@ function setUploadFileAction(filename) {
         payload: filename
     };
 }
+
+/**
+ * Detail
+ * @param id
+ * @returns
+ */
+export function getContactShared(id) {
+    return dispatch => {
+        id = id ?? ""
+        dispatch(getContactSharedLoadingAction())
+        dispatch(apiGet(`contacts/${id}/shared-public`, {}, {}, getContactSharedAction))
+    };
+}
+
+function getContactSharedAction(response) {
+    return {
+        type   : CONSTANTS.GET_CONTACT_SHARED,
+        payload: response
+    };
+}
+
+function getContactSharedLoadingAction() {
+    return {
+        type   : CONSTANTS.GET_CONTACT_SHARED_LOADING,
+        payload: null
+    };
+}

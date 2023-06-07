@@ -7,6 +7,7 @@ import * as Auth from '@features/Auth'
 import * as Dashboard from '@features/Dashboard'
 import * as ContactGroup from '@features/ContactGroup'
 import * as Contact from '@features/Contact'
+import * as Shared from '@features/Shared'
 import {ErrorPage} from "@features/Exceptions";
 
 class AllRoutes extends Component {
@@ -20,6 +21,7 @@ class AllRoutes extends Component {
                 <PublicRoute path="/register-success" layout='Auth'>
                     <Auth.RegisterSuccess/>
                 </PublicRoute>
+                <PublicRoute path="/contact-shared/:id" layout='Auth'><Shared.Index/></PublicRoute>
 
                 <PrivateRoute
                     path="/"

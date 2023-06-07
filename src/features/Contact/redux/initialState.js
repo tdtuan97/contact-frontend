@@ -49,6 +49,12 @@ const initialState = {
     upload: {
         filename: null,
     },
+
+    shared: {
+        errors: {},
+        data: {},
+        loading: false,
+    },
 };
 
 export default initialState;
