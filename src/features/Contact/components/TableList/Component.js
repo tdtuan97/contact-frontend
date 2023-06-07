@@ -184,7 +184,6 @@ class CustomComponent extends Component {
 
     render() {
         const {list, updatePublicStatus} = this.props.contact
-        let {loading, data}              = list
         const {
                   onClickNew,
                   onClickEdit,
@@ -194,6 +193,8 @@ class CustomComponent extends Component {
                   masterData,
               }                          = this.props
 
+        let loading        = list.loading
+        let data           = list.data ?? {}
         let dataPagination = data.pagination ?? {}
         let pagination     = {
             current        : dataPagination.page ?? 1,

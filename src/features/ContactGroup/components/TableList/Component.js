@@ -82,14 +82,14 @@ class CustomComponent extends Component {
 
     render() {
         const {contactGroup} = this.props
-        const {list} = contactGroup
-        const {loading, data} = list
         const {
             onClickNew,
             onClickEdit,
             onShowConfirmDelete,
         } = this.props
 
+        let loading = contactGroup.list.loading
+        let data = contactGroup.list.data ?? {}
         let dataPagination = data.pagination ?? {}
         let pagination = {
             current: dataPagination.page ?? 1,
@@ -123,7 +123,7 @@ class CustomComponent extends Component {
                         <Row gutter={{xs: 8, sm: 12, md: 12}}>
                             <Col xs={24} xl={12}>
                                 <div className="search-input ">
-                                    <div className="input-label">Keyword:</div>
+                                    <div className="input-label">Name:</div>
                                     <div className="input-value">
                                         <Input
                                             placeholder="Search group by name"

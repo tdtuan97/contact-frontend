@@ -214,6 +214,30 @@ export function reducer(state = initialState, action) {
                 },
             }
 
+        /**
+         * Export
+         */
+        case CONSTANTS.IMPORT_CONTACT_LIST:
+            return {
+                ...state,
+                import: {
+                    ...state.import,
+                    loading: false,
+                    data     : payload.data ?? [],
+                    errors   : payload.errors ?? {},
+                },
+            }
+        case CONSTANTS.IMPORT_CONTACT_LIST_LOADING:
+            return {
+                ...state,
+                import: {
+                    ...state.import,
+                    loading: true,
+                    data     : [],
+                    errors   : {},
+                },
+            }
+
         default:
             return state;
     }

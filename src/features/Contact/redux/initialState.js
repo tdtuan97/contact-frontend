@@ -41,7 +41,7 @@ const initialState = {
     },
 
     import: {
-        data: {},
+        data: [],
         errors: {},
         loading: false,
     },

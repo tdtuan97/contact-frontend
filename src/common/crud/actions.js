@@ -37,7 +37,7 @@ export function pendingAction() {
     };
 }
 
-function generateUrl(endPoint) {
+export function generateUrl(endPoint) {
     return helpers.getEndPointAPI() + endPoint;
 }
 

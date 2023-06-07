@@ -4,13 +4,14 @@ import {Button, Divider, Drawer, Form, Select, Upload} from "antd";
 import {
     AntButton,
     AntFormItem,
-    AntInput,
-    Loading
 } from "@layouts";
 import {UploadOutlined} from "@ant-design/icons";
-import {applyToken} from "@common/crud/actions";
-import {resetStore} from "@features/Common/redux";
+import {applyToken, generateUrl} from "@common/crud/actions";
 import {setUploadFile} from "@features/Contact/redux";
+import {TableImportResult} from "@features/Contact/components";
+import {Link} from "react-router-dom";
+
+const importTemplateLink = process.env.REACT_APP_IMPORT_TEMPLATE_LINK
 
 const initValues = {
     id          : null,
@@ -32,45 +33,6 @@ const normFile = (e) => {
 class CustomComponent extends Component {
     formRef = React.createRef();
 
-    componentDidUpdate(prevProps) {
-        const prevDetail    = prevProps.contact.detail;
-        const currentDetail = this.props.contact.detail;
-
-        const prevUpdate    = prevProps.contact.update;
-        const currentUpdate = this.props.contact.update;
-
-        const prevCreate    = prevProps.contact.create;
-        const currentCreate = this.props.contact.create;
-
-        if (prevDetail.data.id !== currentDetail.data.id) {
-            let data = currentDetail.data;
-            if (this.formRef.current) {
-                this.formRef.current.setFieldsValue({
-                    id          : data.id,
-                    name        : data.name ?? "",
-                    email       : data.email ?? "",
-                    phone_number: data.phone_number ?? "",
-                    group_id    : data.group_name ?? null,
-                    is_public   : data.is_public === 1 ? 'Public' : 'Private',
-                })
-            }
-        }
-
-        // Update success => Close
-        if (prevUpdate.data.id !== currentUpdate.data.id) {
-            /*setTimeout(() => {
-                this.onCloseForm();
-            }, 1000)*/
-        }
-
-        // Update success => Close
-        if (prevCreate.data.id !== currentCreate.data.id) {
-            setTimeout(() => {
-                this.onCloseForm();
-            }, 1000)
-        }
-    }
-
     onCloseForm = () => {
         this.resetForm();
         this.props.onCloseForm();
@@ -85,8 +47,7 @@ class CustomComponent extends Component {
     }
 
     uploadConfigs = () => {
-        let token      = ''
-        let action     = "http://127.0.0.1:7001/api/v1/import/upload"
+        let action     = generateUrl('import/upload')
         let apiConfigs = applyToken({})
         return {
             name    : "file",
@@ -115,11 +76,11 @@ class CustomComponent extends Component {
                 onSubmitForm,
                 isVisible,
                 contact,
-                masterData,
             } = this.props
 
         let contactImport = contact.import
         let errors        = contact.import.errors
+        let data        = contact.import.data
 
         return (
             <Drawer
@@ -139,9 +100,17 @@ class CustomComponent extends Component {
                     initialValues={initValues}
                 >
                     <AntFormItem
+                        label="Import Template"
+                    >
+                        <Link to={{
+                            pathname: importTemplateLink
+                        }} target="_blank" download>Download Now</Link>
+                    </AntFormItem>
+                    <AntFormItem
                         name="file"
                         label="Upload"
                         valuePropName="fileList"
+                        errors={errors.filename}
                         getValueFromEvent={normFile}
                     >
                         <Upload {...this.uploadConfigs()} onChange={this.onChangeUpload}>
@@ -164,7 +133,10 @@ class CustomComponent extends Component {
                         </AntButton>
                     </div>
                 </Form>
-
+                <>
+                    <Divider style={{marginBlock: 24}}/>
+                    <TableImportResult list={data}/>
+                </>
             </Drawer>
         )
     }
