@@ -8,6 +8,25 @@ import {
     getContactGroups,
 } from "@features/ContactGroup/redux";
 
+const prepareQueries = (queries = {}) => {
+    let results = {}
+    if (queries.name) {
+        results = {
+            ...results,
+            name: queries.name
+        }
+    }
+
+    if (queries.description) {
+        results = {
+            ...results,
+            description: queries.description
+        }
+    }
+
+    return results;
+}
+
 class CustomComponent extends Component {
     constructor(props) {
         super(props);
@@ -52,7 +71,7 @@ class CustomComponent extends Component {
      * On search
      */
     onSearch = () => {
-        this.props.getContactGroups(this.state.queries)
+        this.props.getContactGroups(prepareQueries(this.state.queries))
     }
 
     /**
@@ -76,7 +95,7 @@ class CustomComponent extends Component {
             order_by: orderBy,
             page: page,
             ...filters,
-            ...this.state.queries,
+            ...prepareQueries(this.state.queries),
         });
     }
 
