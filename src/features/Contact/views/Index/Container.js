@@ -152,6 +152,7 @@ class Container extends Component {
             ...this.state,
             isVisibleImport: false,
         })
+        this.props.getContacts();
     }
 
     /**
