@@ -3,7 +3,6 @@ import {connect} from "react-redux";
 import {AntButton, AntCard, ModalConfirm, ToolboxControl} from "@layouts";
 import {
     DeleteOutlined,
-    DownloadOutlined,
     EditOutlined,
     InfoCircleOutlined, LinkOutlined,
     SearchOutlined,
@@ -17,8 +16,6 @@ import {
 } from "@features/Contact/redux";
 import zaloIcon from '@images/zalo-icon.jpg';
 import * as Components from "@features/Contact/components";
-import {FormSharedUsers} from "@features/Contact/components/FormSharedUsers";
-import {SharedUsersForm} from "@features/Contact/components";
 
 const prepareQueries = (queries = {}) => {
     let results = {}
@@ -79,7 +76,7 @@ class CustomComponent extends Component {
                 phone_number: "",
                 email       : "",
                 groupIds    : [],
-                type        : "me",
+                type        : "all",
                 is_public   : null,
             },
         }
