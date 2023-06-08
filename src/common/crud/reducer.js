@@ -21,7 +21,13 @@ export function reducer(state = initialState, action) {
             };
         case RESPONSE_ACTION:
             if (payload.status >= 400) {
-                pushMessageError(payload.message);
+                switch (payload.status) {
+                    case 422:
+                        pushMessageError('Input Invalid');
+                        break;
+                    default:
+                        pushMessageError(payload.message);
+                }
             }
 
             return {

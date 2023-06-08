@@ -56,15 +56,17 @@ export function reducer(state = initialState, action) {
 
         case REGISTER_ACTION:
             let payload = action.payload ?? {}
+            let success = false
             if (payload.code === CODE_SUCCESS){
                 pushMessageSuccess('Register account success')
+                success = true
             }
             return {
                 ...state,
                 register: {
                     ...state.register,
                     loading: false,
-                    success: true,
+                    success: success,
                 }
             };
         default:
