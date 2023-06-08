@@ -1,0 +1,1 @@
+export { default as SharedUsersForm } from './Component'

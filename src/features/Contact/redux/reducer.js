@@ -260,6 +260,52 @@ export function reducer(state = initialState, action) {
                 },
             }
 
+        /**
+         * Get list
+         */
+        case CONSTANTS.GET_USERS_SHARED:
+            return {
+                ...state,
+                sharedUserList: {
+                    ...state.sharedUserList,
+                    loading: false,
+                    data   : payload ? payload.data : [],
+                },
+            }
+        case CONSTANTS.GET_USERS_SHARED_LOADING:
+            return {
+                ...state,
+                sharedUserList: {
+                    ...state.sharedUserList,
+                    loading: true,
+                },
+            }
+
+        /**
+         * Update
+         */
+        case CONSTANTS.UPDATE_USERS_SHARED:
+            if (payload.code === CODE_SUCCESS) {
+                pushMessageSuccess("Update success.");
+            }
+            return {
+                ...state,
+                sharedUserUpdate: {
+                    ...state.sharedUserUpdate,
+                    loading: false,
+                    isUpdated: true,
+                },
+            }
+        case CONSTANTS.UPDATE_USERS_SHARED_LOADING:
+            return {
+                ...state,
+                sharedUserUpdate: {
+                    ...state.sharedUserUpdate,
+                    loading: true,
+                    isUpdated: false,
+                },
+            }
+
         default:
             return state;
     }

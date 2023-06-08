@@ -55,6 +55,16 @@ const initialState = {
         data: {},
         loading: false,
     },
+
+    sharedUserList: {
+        data: [],
+        loading: false,
+    },
+
+    sharedUserUpdate: {
+        isUpdated: false,
+        loading: false,
+    },
 };
 
 export default initialState;

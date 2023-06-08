@@ -5,7 +5,7 @@ import {
     DeleteOutlined,
     DownloadOutlined,
     EditOutlined,
-    InfoCircleOutlined,
+    InfoCircleOutlined, LinkOutlined,
     SearchOutlined,
     ShareAltOutlined
 } from "@ant-design/icons";
@@ -13,10 +13,12 @@ import {Avatar, Button, Col, Input, Row, Select, Table, Tag, Switch, Tooltip} fr
 import {Link, withRouter} from "react-router-dom";
 import {
     changeContactPublicStatus, exportContacts,
-    getContacts,
+    getContacts, getSharedUsers, updateSharedUsers,
 } from "@features/Contact/redux";
 import zaloIcon from '@images/zalo-icon.jpg';
 import * as Components from "@features/Contact/components";
+import {FormSharedUsers} from "@features/Contact/components/FormSharedUsers";
+import {SharedUsersForm} from "@features/Contact/components";
 
 const prepareQueries = (queries = {}) => {
     let results = {}
@@ -69,16 +71,40 @@ class CustomComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedId: null,
-            queries   : {
+            selectedId          : null,
+            selectedContactId   : null,
+            isVisibleSharedUsers: false,
+            queries             : {
                 name        : "",
                 phone_number: "",
                 email       : "",
                 groupIds    : [],
                 type        : "me",
                 is_public   : null,
-            }
+            },
         }
+    }
+
+    onShowSharedUsers  = (e) => {
+        this.setState({
+            ...this.state,
+            isVisibleSharedUsers: true,
+            selectedContactId   : e.currentTarget.value,
+        })
+
+        this.props.getSharedUsers({
+            contact_id: e.currentTarget.value
+        })
+    }
+    onCloseSharedUsers = () => {
+        this.setState({
+            ...this.state,
+            isVisibleSharedUsers: false,
+            selectedContactId   : null,
+        })
+    }
+    sharedUsersUpdate  = (userIds) => {
+        this.props.updateSharedUsers(this.state.selectedContactId, userIds)
     }
 
     /**
@@ -195,7 +221,7 @@ class CustomComponent extends Component {
                   onClickNew,
                   onClickEdit,
                   onShowConfirmDelete,
-                  onShowShareUser,
+                  onShowView,
                   onShowImportForm,
                   masterData,
 
@@ -205,9 +231,8 @@ class CustomComponent extends Component {
                   isVisibleDeleteConfirm,
                   onAcceptDelete,
 
-                  onSubmitShareUser,
-                  onCloseShareUser,
-                  isVisibleShareUser,
+                  onCloseView,
+                  isVisibleView,
 
                   isVisibleImport,
                   onSubmitImport,
@@ -246,6 +271,7 @@ class CustomComponent extends Component {
 
         let contactExport = this.props.contact.export;
 
+        let {isVisibleSharedUsers} = this.state
         return (
             <AntCard
                 className={"rule-list card-custom"}
@@ -415,7 +441,13 @@ class CustomComponent extends Component {
                     </div>
                     <Table
                         size="small"
-                        columns={columns(onClickEdit, onShowConfirmDelete, this.onChangeSwitch, onShowShareUser)}
+                        columns={columns(
+                            onClickEdit,
+                            onShowConfirmDelete,
+                            this.onChangeSwitch,
+                            onShowView,
+                            this.onShowSharedUsers
+                        )}
                         rowKey={record => record.id}
                         dataSource={dataList}
                         loading={loading}
@@ -439,15 +471,20 @@ class CustomComponent extends Component {
                 />
 
                 <Components.ContactShareForm
-                    isVisible={isVisibleShareUser}
-                    onSubmitForm={onSubmitShareUser}
-                    onCloseForm={onCloseShareUser}
+                    isVisible={isVisibleView}
+                    onCloseForm={onCloseView}
                 />
 
                 <Components.ContactImportForm
                     isVisible={isVisibleImport}
                     onSubmitForm={onSubmitImport}
                     onCloseForm={this.onCloseImportForm}
+                />
+
+                <Components.SharedUsersForm
+                    isVisible={isVisibleSharedUsers}
+                    sharedUsersUpdate={this.sharedUsersUpdate}
+                    onCloseForm={this.onCloseSharedUsers}
                 />
             </AntCard>
         )
@@ -469,12 +506,21 @@ class CustomComponent extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const prevDelete = prevProps.contact.delete;
+        const prevDelete    = prevProps.contact.delete;
         const currentDelete = this.props.contact.delete;
+
+        const prevSharedUserUpdate    = prevProps.contact.sharedUserUpdate;
+        const currentSharedUserUpdate = this.props.contact.sharedUserUpdate;
 
         // Delete success => Close
         if (prevDelete.isDeleted !== currentDelete.isDeleted && currentDelete.isDeleted === true) {
             this.props.getContacts(prepareQueries(this.state.queries))
+        }
+
+        if (prevSharedUserUpdate.isUpdated !== currentSharedUserUpdate.isUpdated && currentSharedUserUpdate.isUpdated === true) {
+            this.props.getSharedUsers({
+                contact_id: this.state.selectedContactId
+            })
         }
     }
 }
@@ -503,7 +549,7 @@ function ShareZaloComponent({value}) {
     return <div dangerouslySetInnerHTML={createMarkup(configs)}/>;
 }
 
-const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUser) => {
+const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowView, onShowSharedUsers) => {
     return [
         {
             width    : 50,
@@ -571,11 +617,9 @@ const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUse
                 <div className="share-link">
                     <Tooltip title={'Share Link'}>
                         <AntButton
-                            className="btn-success-ghost"
-                            icon={<ShareAltOutlined />}
+                            icon={<LinkOutlined/>}
                             href={`contact-shared/${item.id}`}
                             target="_blank"
-
                         >
                         </AntButton>
                     </Tooltip>
@@ -583,6 +627,15 @@ const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUse
                 {
                     item.allow_edit ?
                     <>
+                        <Tooltip title={'Share Contact'}>
+                            <AntButton
+                                className="btn-success-ghost"
+                                icon={<ShareAltOutlined/>}
+                                value={item.id}
+                                onClick={onShowSharedUsers}
+                            >
+                            </AntButton>
+                        </Tooltip>
                         <Tooltip title={'Edit'}>
                             <AntButton
                                 icon={<EditOutlined/>}
@@ -607,7 +660,7 @@ const columns = (onShowDetail, showConfirmDelete, onChangeSwitch, onShowShareUse
                             <AntButton
                                 icon={<InfoCircleOutlined/>}
                                 value={item.id}
-                                onClick={onShowShareUser}
+                                onClick={onShowView}
                             >
                             </AntButton>
                         </Tooltip>
@@ -639,6 +692,14 @@ function mapDispatchToProps(dispatch) {
 
         changeContactPublicStatus: (id, status) => {
             dispatch(changeContactPublicStatus(id, status));
+        },
+
+        getSharedUsers: (params) => {
+            dispatch(getSharedUsers(params));
+        },
+
+        updateSharedUsers: (contactId, userIds) => {
+            dispatch(updateSharedUsers(contactId, userIds));
         },
     };
 }

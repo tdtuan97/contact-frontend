@@ -292,3 +292,59 @@ function getContactSharedLoadingAction() {
         payload: null
     };
 }
+
+export function getSharedUsers(params) {
+    let queries = {
+        ...params,
+        page : params.page ?? 1,
+        limit: params.limit ?? 15,
+    }
+    return dispatch => {
+        dispatch(getSharedUsersLoadingAction())
+        dispatch(apiGet(`users`, queries, {}, getSharedUsersAction))
+    };
+}
+
+function getSharedUsersAction(response) {
+    return {
+        type   : CONSTANTS.GET_USERS_SHARED,
+        payload: response
+    };
+}
+
+function getSharedUsersLoadingAction() {
+    return {
+        type   : CONSTANTS.GET_USERS_SHARED_LOADING,
+        payload: null
+    };
+}
+
+
+/**
+ * Update
+ * @returns
+ * @param contactId
+ * @param userIds
+ */
+export function updateSharedUsers(contactId, userIds) {
+    return dispatch => {
+        dispatch(updateSharedUsersLoadingAction())
+        dispatch(apiPost(`contacts/${contactId}/share`, {
+            user_ids: userIds
+        }, {}, updateSharedUsersAction))
+    };
+}
+
+function updateSharedUsersAction(response) {
+    return {
+        type   : CONSTANTS.UPDATE_USERS_SHARED,
+        payload: response
+    };
+}
+
+function updateSharedUsersLoadingAction() {
+    return {
+        type   : CONSTANTS.UPDATE_USERS_SHARED_LOADING,
+        payload: null
+    };
+}
