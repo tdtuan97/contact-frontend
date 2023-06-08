@@ -53,8 +53,6 @@ class Container extends Component {
     onSubmitForm = (data) => {
         let id = data.id ?? null;
 
-        console.log(data)
-
         let params = {
             name: data.name ?? "",
             phone_number: data.phone_number ?? "",
@@ -80,7 +78,7 @@ class Container extends Component {
             isVisibleFormDetail: false
         })
         this.props.clearFormContact();
-        this.props.getContacts();
+        //this.props.getContacts();
     }
 
     /**
@@ -152,7 +150,6 @@ class Container extends Component {
             ...this.state,
             isVisibleImport: false,
         })
-        this.props.getContacts();
     }
 
     /**
@@ -173,7 +170,7 @@ class Container extends Component {
         this.props.resetStore()
     }
 
-    componentDidUpdate(prevProps) {
+    /*componentDidUpdate(prevProps) {
         const prevDelete = prevProps.contact.delete;
         const currentDelete = this.props.contact.delete;
 
@@ -181,7 +178,7 @@ class Container extends Component {
         if (prevDelete.isDeleted !== currentDelete.isDeleted && currentDelete.isDeleted === true) {
             this.props.getContacts()
         }
-    }
+    }*/
 
     render() {
         const {

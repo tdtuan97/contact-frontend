@@ -38,32 +38,19 @@ class President extends Component {
                         onShowConfirmDelete={onShowConfirmDelete}
                         onShowShareUser={onShowShareUser}
                         onShowImportForm={onShowImportForm}
-                    />
 
-                    <Components.ContactForm
                         isVisibleFormDetail={isVisibleFormDetail}
                         onSubmitForm={onSubmitForm}
                         onCloseForm={onCloseForm}
-                    />
-
-                    <ModalConfirm
-                        onOk={onAcceptDelete}
-                        onCancel={onCloseConfirmDelete}
-                        visible={isVisibleDeleteConfirm}
-                        title="Delete group"
-                        message="Are you sure ?"
-                    />
-
-                    <Components.ContactShareForm
-                        isVisible={isVisibleShareUser}
-                        onSubmitForm={onSubmitShareUser}
-                        onCloseForm={onCloseShareUser}
-                    />
-
-                    <Components.ContactImportForm
-                        isVisible={isVisibleImport}
-                        onSubmitForm={onSubmitImport}
-                        onCloseForm={onCloseImportForm}
+                        isVisibleDeleteConfirm={isVisibleDeleteConfirm}
+                        onCloseConfirmDelete={onCloseConfirmDelete}
+                        onAcceptDelete={onAcceptDelete}
+                        onSubmitShareUser={onSubmitShareUser}
+                        onCloseShareUser={onCloseShareUser}
+                        isVisibleShareUser={isVisibleShareUser}
+                        isVisibleImport={isVisibleImport}
+                        onCloseImportForm={onCloseImportForm}
+                        onSubmitImport={onSubmitImport}
                     />
                 </div>
             </div>

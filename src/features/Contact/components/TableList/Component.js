@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {AntButton, AntCard, ToolboxControl} from "@layouts";
+import {AntButton, AntCard, ModalConfirm, ToolboxControl} from "@layouts";
 import {
     DeleteOutlined,
     DownloadOutlined,
@@ -16,6 +16,7 @@ import {
     getContacts,
 } from "@features/Contact/redux";
 import zaloIcon from '@images/zalo-icon.jpg';
+import * as Components from "@features/Contact/components";
 
 const prepareQueries = (queries = {}) => {
     let results = {}
@@ -152,8 +153,7 @@ class CustomComponent extends Component {
      * On search
      */
     onSearch = () => {
-        let queries = prepareQueries(this.state.queries)
-        this.props.getContacts(queries)
+        this.props.getContacts(prepareQueries(this.state.queries))
     }
 
     /**
@@ -198,6 +198,19 @@ class CustomComponent extends Component {
                   onShowShareUser,
                   onShowImportForm,
                   masterData,
+
+                  isVisibleFormDetail,
+                  onSubmitForm,
+
+                  isVisibleDeleteConfirm,
+                  onAcceptDelete,
+
+                  onSubmitShareUser,
+                  onCloseShareUser,
+                  isVisibleShareUser,
+
+                  isVisibleImport,
+                  onSubmitImport,
               }                          = this.props
 
         let loading        = list.loading
@@ -410,8 +423,59 @@ class CustomComponent extends Component {
                         onChange={(pagination, filters, sorter) => this.onChangeTable(pagination, filters, sorter)}
                     />
                 </div>
+
+                <Components.ContactForm
+                    isVisibleFormDetail={isVisibleFormDetail}
+                    onSubmitForm={onSubmitForm}
+                    onCloseForm={this.onCloseForm}
+                />
+
+                <ModalConfirm
+                    onOk={onAcceptDelete}
+                    onCancel={this.onCloseConfirmDelete}
+                    visible={isVisibleDeleteConfirm}
+                    title="Delete group"
+                    message="Are you sure ?"
+                />
+
+                <Components.ContactShareForm
+                    isVisible={isVisibleShareUser}
+                    onSubmitForm={onSubmitShareUser}
+                    onCloseForm={onCloseShareUser}
+                />
+
+                <Components.ContactImportForm
+                    isVisible={isVisibleImport}
+                    onSubmitForm={onSubmitImport}
+                    onCloseForm={this.onCloseImportForm}
+                />
             </AntCard>
         )
+    }
+
+    onCloseForm = () => {
+        this.props.onCloseForm()
+        this.props.getContacts(prepareQueries(this.state.queries))
+    }
+
+    onCloseConfirmDelete = () => {
+        this.props.onCloseConfirmDelete()
+        this.props.getContacts(prepareQueries(this.state.queries))
+    }
+
+    onCloseImportForm = () => {
+        this.props.onCloseImportForm()
+        this.props.getContacts(prepareQueries(this.state.queries))
+    }
+
+    componentDidUpdate(prevProps) {
+        const prevDelete = prevProps.contact.delete;
+        const currentDelete = this.props.contact.delete;
+
+        // Delete success => Close
+        if (prevDelete.isDeleted !== currentDelete.isDeleted && currentDelete.isDeleted === true) {
+            this.props.getContacts(prepareQueries(this.state.queries))
+        }
     }
 }
 
