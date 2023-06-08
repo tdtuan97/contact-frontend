@@ -764,10 +764,10 @@ const ContactType = [
     },
     {
         value: "me",
-        text : "Created by me",
+        text : "Created By me",
     },
     {
         value: "shared",
-        text : "Shared",
+        text : "Sharing With Me",
     },
 ]
